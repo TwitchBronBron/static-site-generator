@@ -27,7 +27,7 @@ describe('StaticSiteGenerator', () => {
             'scripts/script.js': '//js'
         });
 
-        await build();
+        await run();
         expectFileToEqual(
             `${outDir}/app.css`,
             '/*css*/'
@@ -42,7 +42,7 @@ describe('StaticSiteGenerator', () => {
         writeFiles({
             'index.html': `<title><%="Page title"%></title>`
         });
-        await build();
+        await run();
         expectFileToEqual(`${outDir}/index.html`, `<title>Page title</title>`);
     });
 
@@ -50,7 +50,7 @@ describe('StaticSiteGenerator', () => {
         writeFiles({
             'about.md': '# Hello world'
         });
-        await build();
+        await run();
         expectFileToEqual(`${outDir}/about.html`, '<h1 id="hello-world">Hello world</h1>');
     });
 
@@ -63,7 +63,7 @@ describe('StaticSiteGenerator', () => {
             `,
             'about.md': '*italic*'
         });
-        await build();
+        await run();
         expectFileToEqual(`${outDir}/about.html`, `
             <div id="content">
                 <p><em>italic</em></p>
@@ -96,9 +96,9 @@ function writeFiles(files: Record<string, string>) {
     }
 }
 
-async function build() {
+async function run() {
     const generator = new StaticSiteGenerator(options);
-    await generator.build();
+    await generator.run();
 }
 
 /**

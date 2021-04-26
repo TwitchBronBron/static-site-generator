@@ -26,16 +26,16 @@ export class StaticSiteGenerator {
 
     public run() {
         if (this.options.watch) {
-            this.watch();
+            return this.watch();
         } else {
-            this.build();
+            return this.build();
         }
     }
 
     /**
      * Build the site. This scans the sourceDir, and generates the site into the outDir
      */
-    public async build() {
+    private async build() {
         //create and empty out the destination folder
         fsExtra.emptyDirSync(this.options.outDir!);
 
@@ -177,7 +177,7 @@ export class StaticSiteGenerator {
     private server!: Http2Server;
     private watcher!: chokidar.FSWatcher;
 
-    public async watch() {
+    private async watch() {
         var serve = serveStatic('dist/docs', { 'index': ['index.html'] });
         var host = 'localhost';
         this.server = http.createServer((req, res) => {
@@ -196,7 +196,6 @@ export class StaticSiteGenerator {
             this.build()
         }, 200));
     }
-
 }
 
 /**
