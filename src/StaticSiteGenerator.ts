@@ -63,9 +63,13 @@ export class StaticSiteGenerator {
         const srcPath = path.resolve(this.options.sourceDir, filePath);
         const fileExtension = path.extname(filePath).toLowerCase();
 
-        //pipe html and ejs files through the ejs parser
-        if (['.html', '.ejs'].includes(fileExtension)) {
-            const outPath = path.resolve(this.options.outDir!, filePath).replace(/\.ejs$/i, '.html');
+        //don't compile template files
+        if (filePath === '_template.html') {
+            return;
+
+            //pipe html and ejs files through the ejs parser
+        } else if (fileExtension === '.html') {
+            const outPath = path.resolve(this.options.outDir!, filePath);
             const html = await this.compileEjsFile(srcPath, {});
             await fsExtra.outputFile(outPath, html);
 
@@ -74,10 +78,6 @@ export class StaticSiteGenerator {
             const outPath = path.resolve(this.options.outDir!, filePath).replace(/\.md$/i, '.html');
             const html = await this.compileMarkdownFile(filePath);
             await fsExtra.outputFile(outPath, html);
-
-            //skip template files
-        } else if (['_template.ejs', '_template.html'].includes(path.basename(fileExtension))) {
-            return;
 
             //direct file copy
         } else {
@@ -91,6 +91,7 @@ export class StaticSiteGenerator {
     /**
      * Compute the path to the template file.
      * @param filePath the relative path to the file referencing the template (relative to options.sourceDir)
+     * @returns the absolute path to the template file
      */
     private getTemplatePath(filePath: string, templateFrontmatter?: string) {
         //if the file specified a template, use that file (even if it doesn't exist...)
@@ -99,22 +100,17 @@ export class StaticSiteGenerator {
         } else {
             //walk up the directory tree and use the closest _template.{ejs,html} file
             let dir = filePath;
+
             while (dir = path.dirname(dir)) {
+
+                const templatePath = path.normalize(path.join(dir, '_template.html'));
+                if (this.files.includes(templatePath)) {
+                    return standardizePath(this.options.sourceDir, templatePath);
+                }
                 //quit the loop if we didn't find a template
                 if (dir === '.') {
                     return;
                 }
-                const templatePathRoot = path.join(dir, '_template');
-                const options = [
-                    `${templatePathRoot}.ejs`,
-                    `${templatePathRoot}.html`
-                ];
-                for (const option of options) {
-                    if (this.files.includes(option)) {
-                        return option;
-                    }
-                }
-
             }
         }
         // no template exists
@@ -147,7 +143,7 @@ export class StaticSiteGenerator {
         //find the template path
         const templatePath = this.getTemplatePath(filePath, content.attributes.template);
         if (templatePath) {
-            if (fsExtra.pathExists(templatePath)) {
+            if (!fsExtra.pathExists(templatePath)) {
                 throw new Error(`Cannot find template '${templatePath}' for file '${path.join(this.options.sourceDir, filePath)}'`);
             }
             return this.compileEjsFile(templatePath, {

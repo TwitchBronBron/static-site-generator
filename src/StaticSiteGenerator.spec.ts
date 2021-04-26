@@ -46,20 +46,29 @@ describe('StaticSiteGenerator', () => {
         expectFileToEqual(`${outDir}/index.html`, `<title>Page title</title>`);
     });
 
-    it('compiles ejs in ejs files', async () => {
-        writeFiles({
-            'index.ejs': `<title><%="ejs file"%></title>`
-        });
-        await build();
-        expectFileToEqual(`${outDir}/index.html`, `<title>ejs file</title>`);
-    });
-
     it('compiles simple markdown file', async () => {
         writeFiles({
             'about.md': '# Hello world'
         });
         await build();
         expectFileToEqual(`${outDir}/about.html`, '<h1 id="hello-world">Hello world</h1>');
+    });
+
+    it('transpiles markdown with default template and slot', async () => {
+        writeFiles({
+            '_template.html': `
+                <div id="content">
+                    <%-slots.content%>
+                </div>
+            `,
+            'about.md': '*italic*'
+        });
+        await build();
+        expectFileToEqual(`${outDir}/about.html`, `
+            <div id="content">
+                <p><em>italic</em></p>
+            </div>
+        `);
     });
 });
 
@@ -69,8 +78,8 @@ function expectFileToEqual(filePath: string, expectedText: string, trim = true) 
     }
     let actualText = fsExtra.readFileSync(filePath).toString();
     if (trim) {
-        actualText = trimLeading(actualText.trim());
-        expectedText = trimLeading(expectedText.trim());
+        actualText = trimLeading(actualText);
+        expectedText = trimLeading(expectedText);
     }
     expect(actualText).to.eql(expectedText);
 }
@@ -93,7 +102,8 @@ async function build() {
 }
 
 /**
- * Trim leading whitespace for every line (to make test writing cleaner
+ * Trim leading whitespace for every line (to make test writing cleaner).
+ * Also removes empty lines for consistency
  */
 function trimLeading(text: string) {
     if (!text) {
@@ -107,10 +117,13 @@ function trimLeading(text: string) {
         lines.splice(0, 1);
     }
 
-    for (const line of lines) {
+    for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
         const trimmedLine = line.trimLeft();
         //skip empty lines
         if (trimmedLine.length === 0) {
+            lines.splice(i, 1);
+            i--;
             continue;
         }
         const leadingSpaceCount = line.length - trimmedLine.length;
