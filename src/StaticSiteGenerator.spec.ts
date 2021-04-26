@@ -58,7 +58,7 @@ describe('StaticSiteGenerator', () => {
         writeFiles({
             '_template.html': `
                 <div id="content">
-                    <%-slots.content%>
+                    <%-content%>
                 </div>
             `,
             'about.md': '*italic*'
@@ -68,6 +68,24 @@ describe('StaticSiteGenerator', () => {
             <div id="content">
                 <p><em>italic</em></p>
             </div>
+        `);
+    });
+
+    it('passes custom frontmatter props to template', async () => {
+        writeFiles({
+            '_template.html': `
+               <title><%=title%></title>
+            `,
+            'about.md': trim`
+                ---
+                title: Hello title
+                ---
+                *italic*
+            `
+        });
+        await run();
+        expectFileToEqual(`${outDir}/about.html`, `
+            <title>Hello title</title>
         `);
     });
 });

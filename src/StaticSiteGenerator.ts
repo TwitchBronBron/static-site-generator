@@ -147,10 +147,9 @@ export class StaticSiteGenerator {
                 throw new Error(`Cannot find template '${templatePath}' for file '${path.join(this.options.sourceDir, filePath)}'`);
             }
             return this.compileEjsFile(templatePath, {
-                slots: {
-                    //pass the markdown html in with its slot name
-                    [content.attributes.slot ?? 'content']: mdHtml
-                }
+                //add all frontmatter as properties
+                ...content.attributes,
+                content: mdHtml
             });
         } else {
             return mdHtml;
