@@ -53,17 +53,26 @@ describe('StaticSiteGenerator', () => {
         await build();
         expectFileToEqual(`${outDir}/index.html`, `<title>ejs file</title>`);
     });
+
+    it('compiles simple markdown file', async () => {
+        writeFiles({
+            'about.md': '# Hello world'
+        });
+        await build();
+        expectFileToEqual(`${outDir}/about.html`, '<h1 id="hello-world">Hello world</h1>');
+    });
 });
 
-function expectFileToEqual(filePath: string, expectedContents: string) {
+function expectFileToEqual(filePath: string, expectedText: string, trim = true) {
     if (!fsExtra.pathExistsSync(filePath)) {
         assert.fail(`Expected file to exist at "${filePath}"`);
     }
-    expect(
-        fsExtra.readFileSync(filePath).toString()
-    ).to.eql(
-        expectedContents
-    );
+    let actualText = fsExtra.readFileSync(filePath).toString();
+    if (trim) {
+        actualText = trimLeading(actualText.trim());
+        expectedText = trimLeading(expectedText.trim());
+    }
+    expect(actualText).to.eql(expectedText);
 }
 
 /**
