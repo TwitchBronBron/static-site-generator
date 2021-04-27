@@ -1,7 +1,7 @@
 {
-  "name": "static-site-generator",
+  "name": "statigen",
   "version": "0.1.0",
-  "description": "A very simple tool to generate static websites based on html and markdown source files",
+  "description": "A static site generator that supports html, ejs, and markdown source files",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
