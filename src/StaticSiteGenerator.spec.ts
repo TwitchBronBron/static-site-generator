@@ -56,12 +56,12 @@ describe('StaticSiteGenerator', () => {
 
     it('transpiles markdown with default template and slot', async () => {
         writeFiles({
+            'about.md': '*italic*',
             '_template.html': `
                 <div id="content">
-                    <%-content%>
+                    <%-data.content%>
                 </div>
-            `,
-            'about.md': '*italic*'
+            `
         });
         await run();
         expectFileToEqual(`${outDir}/about.html`, `
@@ -73,14 +73,14 @@ describe('StaticSiteGenerator', () => {
 
     it('passes custom frontmatter props to template', async () => {
         writeFiles({
-            '_template.html': `
-               <title><%=title%></title>
-            `,
             'about.md': trim`
                 ---
                 title: Hello title
                 ---
                 *italic*
+            `,
+            '_template.html': `
+               <title><%=data.title%></title>
             `
         });
         await run();
@@ -115,8 +115,8 @@ function writeFiles(files: Record<string, string>) {
 }
 
 async function run() {
-    const generator = new StaticSiteGenerator(options);
-    await generator.run();
+    const generator = new StaticSiteGenerator();
+    await generator.run(options);
 }
 
 /**

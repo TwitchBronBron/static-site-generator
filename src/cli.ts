@@ -7,13 +7,19 @@ yargs
     .help('help', 'View help information about this tool.')
     .option('sourceDir', {
         description: `Path to the directory containing your source files`,
+        alias: 's',
         type: 'string',
         default: 'src'
     })
     .option('outDir', {
         description: `Path to the directory where the output file should be written.`,
+        alias: 'o',
         type: 'string',
         default: 'dist'
+    })
+    .option('cwd', {
+        description: `Path to the current working directory where the tool should run.`,
+        type: 'string'
     })
     .option('watch', {
         description: `If true, the program will run in watch mode and rebuild on every source file change. This also starts a web server to host the generated site.`,
