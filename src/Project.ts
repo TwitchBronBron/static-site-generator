@@ -1,5 +1,5 @@
 import PluginManager from "./PluginManager";
-import { File } from './interfaces';
+import { Diagnostic, File } from './interfaces';
 import { InternalPlugin } from "./InternalPlugin";
 import { printDiagnostic } from "./diagnosticUtils";
 import * as path from 'path';
@@ -20,6 +20,19 @@ export class Project {
     public options: Options;
 
     private pluginManager = new PluginManager();
+
+    /**
+     * Get the diagnostics from all files
+     */
+    public getDiagnostics() {
+        const result = [] as Diagnostic[];
+        for (const file of this.files.values()) {
+            result.push(
+                ...file.diagnostics
+            );
+        }
+        return result;
+    }
 
     /**
      * Map of all files in the project, indexed by absolute path
@@ -150,21 +163,28 @@ export class Project {
      * If the template could not be found, the content is returned as-is
      */
     public generateWithTemplate(file: TextFile, content: string) {
-        const templateFile = this.getTemplateFile(file);
-        if (templateFile) {
-            return ejs.render(templateFile.text, {
-                //all the ejs data should be inside a `data` object so we don't have to deal with undefined variable errors in ejs
-                data: {
-                    ...(file.attributes ?? {}),
-                    file: file,
-                    project: this,
-                    content: content
+        try {
+            const templateFile = this.getTemplateFile(file);
+            if (templateFile) {
+                return ejs.render(templateFile.text, {
+                    //all the ejs data should be inside a `data` object so we don't have to deal with undefined variable errors in ejs
+                    data: {
+                        ...(file.attributes ?? {}),
+                        file: file,
+                        project: this,
+                        content: content
+                    }
                 }
+                );
+            } else {
+                //no template was found. return the content as-is
+                return content;
             }
-            );
-        } else {
-            //no template was found. return the content as-is
-            return content;
+        } catch (e) {
+            file.diagnostics.push({
+                file: file,
+                ...DiagnosticMessages.genericError(e)
+            });
         }
     }
 

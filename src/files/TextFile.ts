@@ -1,6 +1,5 @@
 import { Diagnostic, File } from "../interfaces";
 import * as fsExtra from 'fs-extra';
-import * as ejs from 'ejs';
 import { Project } from "../Project";
 const frontMatter = require('front-matter');
 
@@ -52,27 +51,10 @@ export class TextFile implements File {
         return this.lines[index];
     }
 
-    /**
-     * Generate the content based on
-     */
-    public generateContent(data: { content: string;[key: string]: any }) {
-        //for all text-based files, this will use the ejs templating engine.
-        return ejs.render(
-            this.text,
-            {
-                data: {
-                    ...data,
-                    project: this.project,
-                    file: this
-                }
-            }
-        );
-    }
-
     public publish() {
         fsExtra.outputFileSync(
             this.outPath,
-            this.generateContent({ content: '' })
+            this.project.generateWithTemplate(this, this.text)
         );
     }
 }

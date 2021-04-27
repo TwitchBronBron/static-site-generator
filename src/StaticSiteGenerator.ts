@@ -6,6 +6,7 @@ import * as liveServer from 'live-server';
 import * as chalk from 'chalk';
 import { log } from './util';
 import { Project } from './Project';
+import { printDiagnostic } from './diagnosticUtils';
 
 export class StaticSiteGenerator {
     constructor() {
@@ -43,6 +44,11 @@ export class StaticSiteGenerator {
     private build() {
         this.project.validate();
         this.project.publish();
+        const diagnostics = this.project.getDiagnostics();
+        for (const diagnostic of diagnostics) {
+            printDiagnostic(diagnostic);
+        }
+        throw new Error(`Found ${diagnostics.length} issues during publish`);
     }
 
     private watcher!: chokidar.FSWatcher;
@@ -57,9 +63,20 @@ export class StaticSiteGenerator {
             ignoreInitial: false
         });
         const build = debounce(this.build.bind(this));
-        //watch the srcDir for any changes
-        this.watcher.on('all', (eventName: string, path: string) => {
-            log(`File changed (${eventName})`, chalk.green(path));
+
+        this.watcher.on('add', (file) => {
+            log('File added', chalk.green(file));
+            this.project.setFile(file);
+            build();
+        });
+        this.watcher.on('change', (file) => {
+            log('File changed', chalk.green(file));
+            this.project.setFile(file);
+            build();
+        });
+        this.watcher.on('unlink', (file) => {
+            log('File removed', chalk.green(file));
+            this.project.removeFile(file);
             build();
         });
     }
