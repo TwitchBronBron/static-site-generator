@@ -28,8 +28,8 @@ yargs
     })
     .command('$0 [files..]', '', () => { }, async (argv: any) => {
         try {
-            const generator = new StaticSiteGenerator(argv);
-            await generator.run();
+            const generator = new StaticSiteGenerator();
+            await generator.run(argv);
         } catch (e) {
             console.error(e?.message || e);
             process.exit(1);

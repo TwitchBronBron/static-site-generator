@@ -1,6 +1,7 @@
 import { Diagnostic, File } from "../interfaces";
 import * as fsExtra from 'fs-extra';
 import * as ejs from 'ejs';
+import { Project } from "../Project";
 const frontMatter = require('front-matter');
 
 export class TextFile implements File {
@@ -8,6 +9,8 @@ export class TextFile implements File {
         public srcPath: string,
         public outPath: string
     ) { }
+
+    public project: Project;
 
     /**
      * The text contents of the file (minus any frontmatter)
