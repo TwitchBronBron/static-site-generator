@@ -51,8 +51,10 @@ export class StaticSiteGenerator {
     }
 
     private build() {
+        log('Building project...');
         this.project.validate();
         this.project.publish();
+        log('Done!');
     }
 
     private watcher!: chokidar.FSWatcher;
@@ -72,7 +74,8 @@ export class StaticSiteGenerator {
 
         liveServer.start({
             root: this.project.options.outDir!,
-            open: true
+            open: true,
+            logLevel: 0
         });
         this.watcher = chokidar.watch('**/*', {
             cwd: this.project.options.sourceDir,

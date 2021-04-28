@@ -7,6 +7,7 @@ import { Options } from "./StaticSiteGenerator";
 import { TextFile } from "./files/TextFile";
 import { standardizePath } from "./util";
 import { DiagnosticMessages } from "./DiagnosticMessages";
+import { Tree } from "./Tree";
 
 export class Project {
     constructor(
@@ -37,6 +38,28 @@ export class Project {
      * Map of all files in the project, indexed by absolute path
      */
     public files = new Map<string, File>();
+
+    /**
+     * Get a tree of all the html files based on their output paths
+     */
+    public getTree() {
+        if (!this.cache.tree) {
+            this.cache.tree = new Tree<File>(undefined);
+            for (var file of this.files.values()) {
+                const filename = path.basename(file.outPath);
+
+                //skip files starting with underscore, and skip all non-html files
+                if (filename.startsWith('_') || !filename.toLowerCase().endsWith('.html')) {
+                    continue;
+                }
+
+                const relativePath = file.outPath.replace(this.options.outDir + path.sep, '').replace(/\.\w$/, '');
+                this.cache.tree.add(relativePath, file);
+            }
+            this.cache.tree.sort();
+        }
+        return this.cache.tree;
+    }
 
     /**
      * Add or replace a file in the project
@@ -175,7 +198,13 @@ export class Project {
         }
     }
 
+    /**
+     * A cache that can be used by templates and plugins. This is cleared before every publish
+     */
+    public cache: Record<string, any>;
+
     public publish() {
+        this.cache = {};
         for (const file of this.files.values()) {
             this.pluginManager.emit('beforeFilePublish', { project: this, file: file });
             const startsWithUnderscore = path.basename(file.srcPath).startsWith('_');

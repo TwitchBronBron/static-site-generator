@@ -18,14 +18,13 @@ export class EjsFile extends TextFile {
 
     public renderAsTemplate(file: TextFile, content: string) {
         const data = {
-            //all the ejs data should be inside a `data` object so we don't have to deal with undefined variable errors in ejs
-            data: {
+            attributes: {
                 ...(file.attributes ?? {}),
-                file: file,
-                project: this,
-                content: content,
-                require: require
-            }
+            },
+            content: content,
+            file: file,
+            project: this.project,
+            require: require
         };
         try {
             return ejs.render(this.text, data);
