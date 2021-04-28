@@ -1,9 +1,9 @@
 import { DiagnosticSeverity } from "./interfaces";
 
 export const DiagnosticMessages = {
-    genericError: (error: Error) => {
+    genericError: (message: string) => {
         return {
-            message: error.message,
+            message: message,
             code: 'core1000',
             severity: DiagnosticSeverity.Error
         };

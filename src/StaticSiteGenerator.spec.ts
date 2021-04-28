@@ -88,6 +88,17 @@ describe('StaticSiteGenerator', () => {
             <title>Hello title</title>
         `);
     });
+
+    it('does not crash on ejs syntax errors', async () => {
+        writeFiles({
+            'test.html': trim`<%=hello world%>`,
+        });
+        const generator = await run();
+        expect(generator.project.getDiagnostics().map(x => x.message)).to.eql([
+            'Unexpected token'
+        ]);
+    });
+
 });
 
 function expectFileToEqual(filePath: string, expectedText: string, trim = true) {
@@ -117,6 +128,7 @@ function writeFiles(files: Record<string, string>) {
 async function run() {
     const generator = new StaticSiteGenerator();
     await generator.run(options);
+    return generator;
 }
 
 /**

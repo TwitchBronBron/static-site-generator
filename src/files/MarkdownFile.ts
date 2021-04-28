@@ -16,7 +16,7 @@ export class MarkdownFile extends TextFile {
     public publish() {
         fsExtra.outputFileSync(
             this.outPath,
-            this.project.generateWithTemplate(this, marked(this.text)),
+            this.project.generateWithTemplate(this, marked(this.text)) ?? '',
         );
     }
 }

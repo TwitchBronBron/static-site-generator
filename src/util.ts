@@ -1,6 +1,7 @@
 import * as path from 'path';
 import * as moment from 'moment';
 import chalk from 'chalk';
+import { Range } from './interfaces';
 
 /**
  * Normalize, resolve, and standardize path.sep for a chunk of path parts
@@ -20,4 +21,17 @@ export function log(...messages: any[]) {
         '[' + chalk.grey(moment().format(`hh:mm:ss:SSSS A`)) + ']',
         ...messages
     );
+}
+
+export function createRange(startLine: number, startCharacter: number, endLine: number, endCharacter: number): Range {
+    return {
+        start: {
+            line: startLine,
+            character: startCharacter
+        },
+        end: {
+            line: endLine,
+            character: endCharacter
+        }
+    };
 }

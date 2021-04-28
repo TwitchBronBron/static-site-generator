@@ -5,9 +5,10 @@ import { printDiagnostic } from "./diagnosticUtils";
 import * as path from 'path';
 import { Options } from "./StaticSiteGenerator";
 import { TextFile } from "./files/TextFile";
-import { standardizePath } from "./util";
+import { createRange, standardizePath } from "./util";
 import { DiagnosticMessages } from "./DiagnosticMessages";
 import * as ejs from 'ejs';
+import * as ejsLint from 'ejs-lint';
 
 export class Project {
     constructor(
@@ -158,33 +159,66 @@ export class Project {
     }
 
     /**
+     * Render an Ejs file.
+     * @param template the text containing the ejs text
+     * @param content any inner content that should be bound do the `data.content` property
+     */
+    public renderEjs(file: TextFile, template: string, content: string) {
+        const data = {
+            //all the ejs data should be inside a `data` object so we don't have to deal with undefined variable errors in ejs
+            data: {
+                ...(file.attributes ?? {}),
+                file: file,
+                project: this,
+                content: content,
+                require: require
+            }
+        };
+        try {
+            return ejs.render(template, data);
+        } catch (e: unknown) {
+            const error = e as Error;
+            //scan the file with ejs-lint to figure out the actual syntax errors
+            const lintError = ejsLint(template, data);
+            if (lintError) {
+                //add diagnostic for syntax error
+                file.diagnostics.push({
+                    file: file,
+                    range: createRange(lintError.line - 1, lintError.column - 1, lintError.line - 1, lintError.column - 1),
+                    ...DiagnosticMessages.genericError(lintError.message)
+                });
+
+                //if this looks like an ejs error, try to extract the line and message information
+            } else if (error.message?.includes('>>')) {
+                //push the underlying error...better than nothing
+                file.diagnostics.push({
+                    file: file,
+                    ...DiagnosticMessages.genericError(error.message)
+                });
+
+            } else {
+                //push the underlying error...better than nothing
+                file.diagnostics.push({
+                    file: file,
+                    ...DiagnosticMessages.genericError(e)
+                });
+
+            }
+        }
+    }
+
+    /**
      * Given a file, look up its template and then generate the output text
      * using the ejs templating engine.
      * If the template could not be found, the content is returned as-is
      */
     public generateWithTemplate(file: TextFile, content: string) {
-        try {
-            const templateFile = this.getTemplateFile(file);
-            if (templateFile) {
-                return ejs.render(templateFile.text, {
-                    //all the ejs data should be inside a `data` object so we don't have to deal with undefined variable errors in ejs
-                    data: {
-                        ...(file.attributes ?? {}),
-                        file: file,
-                        project: this,
-                        content: content
-                    }
-                }
-                );
-            } else {
-                //no template was found. return the content as-is
-                return content;
-            }
-        } catch (e) {
-            file.diagnostics.push({
-                file: file,
-                ...DiagnosticMessages.genericError(e)
-            });
+        const templateFile = this.getTemplateFile(file);
+        if (templateFile) {
+            return this.renderEjs(file, templateFile.text, content);
+        } else {
+            //no template was found. return the content as-is
+            return content;
         }
     }
 

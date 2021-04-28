@@ -54,7 +54,7 @@ export class TextFile implements File {
     public publish() {
         fsExtra.outputFileSync(
             this.outPath,
-            this.project.generateWithTemplate(this, this.text)
+            this.project.generateWithTemplate(this, this.text) ?? ''
         );
     }
 }

@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import * as chalk from "chalk";
 import { Diagnostic, DiagnosticSeverity } from "./interfaces";
 
 export function printDiagnostic(
@@ -23,7 +23,7 @@ export function printDiagnostic(
         ' - ' +
         typeColor[diagnostic.severity](diagnostic.severity) +
         ' ' +
-        chalk.grey('BS' + diagnostic.code) +
+        chalk.grey(diagnostic.code) +
         ': ' +
         chalk.white(diagnostic.message)
     );
@@ -41,8 +41,8 @@ export function printDiagnostic(
         let blankLineNumberText = chalk.bgWhite(' ' + chalk.bgWhite((diagnostic.range.start.line + 1).toString()) + ' ') + ' ';
         console.log(lineNumberText + diagnosticLine);
         console.log(blankLineNumberText + typeColor[diagnostic.severity](squigglyText));
+        console.log('');
     }
-    console.log('');
 }
 
 
