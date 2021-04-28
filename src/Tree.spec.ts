@@ -6,7 +6,7 @@ describe.only('Tree', () => {
     let tree: Tree<File>;
 
     beforeEach(() => {
-        tree = new Tree<File>(undefined);
+        tree = new Tree<File>(undefined, undefined);
     });
 
     it('adds top-level file nodes', () => {

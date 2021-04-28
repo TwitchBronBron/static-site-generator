@@ -1,6 +1,7 @@
 export class Tree<T> {
     constructor(
         public name: string,
+        public path: string,
         public data?: T,
         public children: Array<Tree<T>> = []
     ) {
@@ -20,14 +21,14 @@ export class Tree<T> {
             if (search) {
                 node = search;
             } else {
-                const newNode = new Tree<T>(part);
+                const newNode = new Tree<T>(part, path);
                 node.children.push(newNode);
                 node = newNode;
             }
         }
         //now that we have the parent node, push the file
         node.children.push(
-            new Tree<T>(filename, data)
+            new Tree<T>(filename, path, data)
         );
     }
 

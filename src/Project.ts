@@ -44,7 +44,7 @@ export class Project {
      */
     public getTree() {
         if (!this.cache.tree) {
-            this.cache.tree = new Tree<File>(undefined);
+            this.cache.tree = new Tree<File>(undefined, undefined);
             for (var file of this.files.values()) {
                 const filename = path.basename(file.outPath);
 
