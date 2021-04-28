@@ -1,4 +1,4 @@
-import { Diagnostic, File } from "../interfaces";
+import type { Diagnostic, File } from '../interfaces';
 import * as fsExtra from 'fs-extra';
 
 export class RawFile implements File {

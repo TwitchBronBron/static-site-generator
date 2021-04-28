@@ -1,6 +1,6 @@
 import { TextFile } from './TextFile';
 import * as fsExtra from 'fs-extra';
-import { File } from '../interfaces';
+import type { File } from '../interfaces';
 
 export class HtmlFile extends TextFile {
     public renderAsTemplate(file: File, content: string) {
@@ -11,6 +11,6 @@ export class HtmlFile extends TextFile {
         fsExtra.outputFileSync(
             this.outPath,
             this.project.generateWithTemplate(this, this.text)
-        )
+        );
     }
 }

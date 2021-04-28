@@ -1,13 +1,13 @@
-import PluginManager from "./PluginManager";
-import { Diagnostic, File } from './interfaces';
-import { InternalPlugin } from "./InternalPlugin";
-import { printDiagnostic } from "./diagnosticUtils";
+import PluginManager from './PluginManager';
+import type { Diagnostic, File } from './interfaces';
+import { InternalPlugin } from './InternalPlugin';
+import { printDiagnostic } from './diagnosticUtils';
 import * as path from 'path';
-import { Options } from "./StaticSiteGenerator";
-import { TextFile } from "./files/TextFile";
-import { standardizePath } from "./util";
-import { DiagnosticMessages } from "./DiagnosticMessages";
-import { Tree } from "./Tree";
+import type { Options } from './StaticSiteGenerator';
+import type { TextFile } from './files/TextFile';
+import { standardizePath } from './util';
+import { DiagnosticMessages } from './DiagnosticMessages';
+import { Tree } from './Tree';
 
 export class Project {
     constructor(
@@ -45,7 +45,7 @@ export class Project {
     public getTree() {
         if (!this.cache.tree) {
             this.cache.tree = new Tree<File>(undefined, undefined);
-            for (var file of this.files.values()) {
+            for (let file of this.files.values()) {
                 const filename = path.basename(file.outPath);
 
                 //skip files starting with underscore, and skip all non-html files
@@ -84,7 +84,7 @@ export class Project {
                 project: this,
                 srcPath: srcPath,
                 outPath: outPath
-            }) as File;
+            });
             //link this project to the file
             file.project = this;
             this.files.set(srcPath, file);
@@ -140,7 +140,7 @@ export class Project {
     public getTemplateFile(file: TextFile): File {
         //if the file specified a template, use that file (even if it doesn't exist...)
         if (file.attributes.template) {
-            const templateSrcPath = standardizePath(path.dirname(file.srcPath), file.attributes.template);
+            const templateSrcPath = standardizePath(path.dirname(file.srcPath), file.attributes.template as string);
             if (!this.files.has(templateSrcPath)) {
                 file.diagnostics.push({
                     file: file,
@@ -162,6 +162,7 @@ export class Project {
             //walk up the directory tree and use the closest _template.{ejs,html} file
 
             let dir = file.srcPath.replace(this.options.sourceDir + path.sep, '');
+            // eslint-disable-next-line no-cond-assign
             while (dir = path.dirname(dir)) {
                 for (const ext of ['.ejs', '.html']) {
                     const templatePath = path.resolve(
@@ -223,10 +224,10 @@ export class Project {
      */
     private setOptions(options: Options) {
         this.options = {} as Options;
-        this.options.cwd = standardizePath(process.cwd(), options.cwd!).replace(/[\\\/]+$/, '');
+        this.options.cwd = standardizePath(process.cwd(), options.cwd).replace(/[\\\/]+$/, '');
         this.options.sourceDir = this.resolvePath(options.sourceDir, 'src').replace(/[\\\/]+$/, '');
         this.options.outDir = this.resolvePath(options.outDir, 'dist').replace(/[\\\/]+$/, '');
-        this.options.files = options.files ?? ["**/*"]
+        this.options.files = options.files ?? ['**/*'];
         this.options.watch = options.watch === true;
         return options;
     }
@@ -237,8 +238,8 @@ export class Project {
     private resolvePath(thePath?: string, defaultValue?: string) {
         return path.normalize(
             path.resolve(
-                this.options.cwd!,
-                thePath ?? defaultValue!
+                this.options.cwd,
+                thePath ?? defaultValue
             )
         ).replace(/[\\\/]/g, path.sep);
     }

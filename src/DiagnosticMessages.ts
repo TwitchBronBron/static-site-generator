@@ -1,4 +1,4 @@
-import { DiagnosticSeverity } from "./interfaces";
+import { DiagnosticSeverity } from './interfaces';
 
 export const DiagnosticMessages = {
     genericError: (message: string) => {
@@ -19,5 +19,5 @@ export const DiagnosticMessages = {
             code: 'core1000',
             severity: DiagnosticSeverity.Error
         };
-    },
+    }
 };

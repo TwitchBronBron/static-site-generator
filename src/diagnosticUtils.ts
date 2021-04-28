@@ -1,5 +1,6 @@
-import * as chalk from "chalk";
-import { Diagnostic, DiagnosticSeverity } from "./interfaces";
+import * as chalk from 'chalk';
+import type { Diagnostic } from './interfaces';
+import { DiagnosticSeverity } from './interfaces';
 
 export function printDiagnostics(diagnostics?: Diagnostic[]) {
     if (diagnostics?.length > 0) {
@@ -18,10 +19,10 @@ export function printDiagnostic(
         [DiagnosticSeverity.Information]: chalk.blue,
         [DiagnosticSeverity.Hint]: chalk.green,
         [DiagnosticSeverity.Warning]: chalk.yellow,
-        [DiagnosticSeverity.Error]: chalk.red,
+        [DiagnosticSeverity.Error]: chalk.red
     };
 
-    const typeColorFunc = typeColor[diagnostic.severity] ?? function (text) { return text; };
+    const typeColorFunc = typeColor[diagnostic.severity] ?? ((text) => text);
     console.log('');
     console.log(
         chalk.cyan(diagnostic.file?.srcPath ?? '<unknown file>') +

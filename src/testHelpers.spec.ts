@@ -1,6 +1,7 @@
 import * as fsExtra from 'fs-extra';
 import * as path from 'path';
-import { Options, StaticSiteGenerator } from './StaticSiteGenerator';
+import type { Options } from './StaticSiteGenerator';
+import { StaticSiteGenerator } from './StaticSiteGenerator';
 
 export const tempDir = path.resolve(path.join(__dirname, '..', '.tmp'));
 export const sourceDir = path.join(tempDir, 'src');
@@ -10,7 +11,7 @@ export const options = {} as Options;
 beforeEach(() => {
     for (const key in options) {
         delete options[key];
-    };
+    }
     options.sourceDir = sourceDir;
     options.outDir = outDir;
     fsExtra.emptydirSync(tempDir);

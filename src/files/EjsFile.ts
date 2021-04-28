@@ -2,7 +2,7 @@ import { TextFile } from './TextFile';
 import * as fsExtra from 'fs-extra';
 import * as ejs from 'ejs';
 import * as ejsLint from 'ejs-lint';
-import { createRange, getEjsError } from "../util";
+import { createRange, getEjsError } from '../util';
 import { DiagnosticMessages } from '../DiagnosticMessages';
 
 export class EjsFile extends TextFile {
@@ -19,7 +19,7 @@ export class EjsFile extends TextFile {
     public renderAsTemplate(file: TextFile, content: string) {
         const data = {
             attributes: {
-                ...(file.attributes ?? {}),
+                ...(file.attributes ?? {})
             },
             content: content,
             file: file,
@@ -31,7 +31,7 @@ export class EjsFile extends TextFile {
         } catch (e: unknown) {
             const error = e as Error;
             //scan the file with ejs-lint to figure out the actual syntax errors
-            const lintError = ejsLint(this.text, data);
+            const lintError = ejsLint(this.text, data) as { line: number; column: number; message: string };
             if (lintError) {
                 //add diagnostic for syntax error
                 file.diagnostics.push({
@@ -76,6 +76,6 @@ export class EjsFile extends TextFile {
         fsExtra.outputFileSync(
             this.outPath,
             this.renderAsTemplate(this, '') ?? ''
-        )
+        );
     }
 }

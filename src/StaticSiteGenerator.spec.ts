@@ -114,7 +114,7 @@ describe('StaticSiteGenerator', () => {
 
     it('does not crash on ejs syntax errors', async () => {
         writeFiles({
-            'test.ejs': trim`<%=hello world%>`,
+            'test.ejs': trim`<%=hello world%>`
         });
         const generator = await run();
         expect(generator.project.getDiagnostics().map(x => x.message)).to.eql([
@@ -127,7 +127,7 @@ describe('StaticSiteGenerator', () => {
             'test.ejs': trim`
                 <html>
                 <%=hello%>
-            `,
+            `
         });
         const generator = await run();
         const diagnostics = generator.project.getDiagnostics();

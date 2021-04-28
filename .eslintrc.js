@@ -56,6 +56,10 @@ module.exports = {
         '@typescript-eslint/no-unused-vars': 'off',
         '@typescript-eslint/no-unused-vars-experimental': 'off',
         '@typescript-eslint/no-use-before-define': 'off',
+        '@typescript-eslint/object-curly-spacing': [
+            'error',
+            'always'
+        ],
         '@typescript-eslint/prefer-for-of': 'off',
         '@typescript-eslint/prefer-readonly': 'off',
         '@typescript-eslint/prefer-readonly-parameter-types': 'off',
@@ -140,10 +144,7 @@ module.exports = {
         'no-unneeded-ternary': 'off',
         'no-useless-escape': 'off',
         'no-warning-comments': 'off',
-        'object-curly-spacing': [
-            'error',
-            'always'
-        ],
+        'object-curly-spacing': 'off',
         'object-property-newline': 'off',
         'object-shorthand': [
             'error',

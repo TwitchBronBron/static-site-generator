@@ -1,5 +1,5 @@
-import { TextFile } from "./files/TextFile";
-import type { Project } from "./Project";
+import type { TextFile } from './files/TextFile';
+import type { Project } from './Project';
 
 export interface File {
     /**
@@ -47,7 +47,7 @@ export interface Diagnostic {
     code: string;
     severity: DiagnosticSeverity;
     message: string;
-    relatedInformation?: DiagnosticRelatedInformation[]
+    relatedInformation?: DiagnosticRelatedInformation[];
 }
 
 export interface DiagnosticRelatedInformation {
@@ -74,13 +74,12 @@ export interface Position {
 }
 
 
-
 export interface Plugin {
     /**
      * Allow the plugin to provide a custom file class
      * Called anytime the project has a file added.
      */
-    provideFile?: PluginHandler<ProvideFileEvent, File | void>
+    provideFile?: PluginHandler<ProvideFileEvent, File | void>;
     /**
      * Emitted whenever a file is added to the project.
      */
@@ -96,7 +95,7 @@ export interface Plugin {
     /**
      * Emitted whenveer a file is removed from the project
      */
-    onFileRemove?: PluginHandler<OnFileRemoveEvent>
+    onFileRemove?: PluginHandler<OnFileRemoveEvent>;
     /**
      * Emitted before a file's `validate` method is called. This is emitted even if the file doesn't have a `validate` method defined
      */

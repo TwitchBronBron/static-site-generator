@@ -1,4 +1,4 @@
-import { TextFile } from "./TextFile";
+import { TextFile } from './TextFile';
 import * as marked from 'marked';
 import * as fsExtra from 'fs-extra';
 
@@ -18,7 +18,7 @@ export class MarkdownFile extends TextFile {
         //remove trailing newline
         fsExtra.outputFileSync(
             this.outPath,
-            this.project.generateWithTemplate(this, html),
+            this.project.generateWithTemplate(this, html)
         );
     }
 }

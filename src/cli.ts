@@ -1,7 +1,9 @@
 #!/usr/bin/env node
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 
 import * as yargs from 'yargs';
-import { StaticSiteGenerator } from "./StaticSiteGenerator";
+import type { Options } from './StaticSiteGenerator';
+import { StaticSiteGenerator } from './StaticSiteGenerator';
 yargs
     .usage('$0', 'A simple convention-based static site generator for markdown files')
     .help('help', 'View help information about this tool.')
@@ -26,13 +28,11 @@ yargs
         type: 'boolean',
         default: false
     })
-    .command('$0 [files..]', '', () => { }, async (argv: any) => {
-        try {
-            const generator = new StaticSiteGenerator();
-            await generator.run(argv);
-        } catch (e) {
+    .command('$0 [files..]', '', () => { }, (argv: any) => {
+        const generator = new StaticSiteGenerator();
+        generator.run(argv as Options).catch((e) => {
             console.error(e);
             process.exit(1);
-        }
+        });
     })
     .argv;

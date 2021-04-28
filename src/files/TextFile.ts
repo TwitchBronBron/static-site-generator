@@ -1,7 +1,7 @@
-import { Diagnostic, File } from "../interfaces";
+import type { Diagnostic, File } from '../interfaces';
 import * as fsExtra from 'fs-extra';
-import { Project } from "../Project";
-const frontMatter = require('front-matter');
+import type { Project } from '../Project';
+import * as frontMatter from 'front-matter';
 
 export class TextFile implements File {
     constructor(
@@ -39,7 +39,7 @@ export class TextFile implements File {
     public load() {
         const text = fsExtra.readFileSync(this.srcPath).toString();
         //parse any detected frontmatter
-        const content = frontMatter(text);
+        const content = (frontMatter as any)(text);
         this.text = content.body;
         this.attributes = content.attributes;
     }

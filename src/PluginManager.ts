@@ -1,4 +1,4 @@
-import type { Plugin } from "./interfaces";
+import type { Plugin } from './interfaces';
 
 export type Arguments<T> = [T] extends [(...args: infer U) => any]
     ? U

@@ -1,7 +1,7 @@
 import * as path from 'path';
 import * as moment from 'moment';
 import * as chalk from 'chalk';
-import { Range } from './interfaces';
+import type { Range } from './interfaces';
 
 /**
  * Normalize, resolve, and standardize path.sep for a chunk of path parts
@@ -16,7 +16,7 @@ export function standardizePath(...parts: string[]) {
 }
 
 
-export function log(...messages: any[]) {
+export function log<T>(...messages: T[]) {
     console.log(
         '[' + chalk.grey(moment().format(`hh:mm:ss:SSSS A`)) + ']',
         ...messages
@@ -45,5 +45,5 @@ export function getEjsError(error: Error) {
     return {
         message: error.message.split(/\r?\n/).pop(),
         line: isNaN(lineNumber) ? undefined : lineNumber
-    }
+    };
 }

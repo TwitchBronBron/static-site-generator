@@ -1,9 +1,9 @@
-import { ProvideFileEvent, Plugin } from "./interfaces";
+import type { ProvideFileEvent, Plugin } from './interfaces';
 import * as path from 'path';
-import { HtmlFile } from "./files/HtmlFile";
-import { MarkdownFile } from "./files/MarkdownFile";
-import { RawFile } from "./files/RawFile";
-import { EjsFile } from "./files/EjsFile";
+import { HtmlFile } from './files/HtmlFile';
+import { MarkdownFile } from './files/MarkdownFile';
+import { RawFile } from './files/RawFile';
+import { EjsFile } from './files/EjsFile';
 
 export class InternalPlugin implements Plugin {
     provideFile(event: ProvideFileEvent) {

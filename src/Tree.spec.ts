@@ -1,8 +1,8 @@
-import { expect } from "chai";
-import { File } from "./interfaces";
-import { Tree } from "./Tree";
+import { expect } from 'chai';
+import type { File } from './interfaces';
+import { Tree } from './Tree';
 
-describe.only('Tree', () => {
+describe('Tree', () => {
     let tree: Tree<File>;
 
     beforeEach(() => {
@@ -40,7 +40,7 @@ describe.only('Tree', () => {
 
 function getLeafKeys<T>(tree: Tree<T>, parentKey?: string) {
     const myKey = parentKey ? parentKey + '/' + tree.name : tree.name;
-    const keys = [];
+    const keys = [] as string[];
     //only keep the leaf keys
     if (!tree.hasChildren) {
         keys.push(myKey);

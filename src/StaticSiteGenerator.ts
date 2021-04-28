@@ -9,9 +9,6 @@ import { Project } from './Project';
 import { printDiagnostics } from './diagnosticUtils';
 
 export class StaticSiteGenerator {
-    constructor() {
-    }
-
     public project: Project;
 
     public run(options: Options) {
@@ -23,6 +20,7 @@ export class StaticSiteGenerator {
         if (this.project.options.watch) {
             //return a promise that never resolves
             return new Promise(() => {
+                // eslint-disable-next-line @typescript-eslint/no-floating-promises
                 this.watch();
             });
         } else {
@@ -37,7 +35,7 @@ export class StaticSiteGenerator {
         //load all the files into the project
         const filePaths = globby
             //find all the files
-            .sync(this.project.options.files!, {
+            .sync(this.project.options.files, {
                 cwd: this.project.options.sourceDir,
                 absolute: false
             })
@@ -65,7 +63,7 @@ export class StaticSiteGenerator {
      */
     private watchInterval: NodeJS.Timer;
 
-    private async watch() {
+    private watch() {
         if (this.watchInterval) {
             clearInterval(this.watchInterval);
         }
@@ -73,7 +71,7 @@ export class StaticSiteGenerator {
         this.watchInterval = setInterval(() => { }, 1073741824);
 
         liveServer.start({
-            root: this.project.options.outDir!,
+            root: this.project.options.outDir,
             open: true,
             logLevel: 0
         });
