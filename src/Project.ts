@@ -92,8 +92,8 @@ export class Project {
      */
     public validate() {
         for (const file of this.files.values()) {
+            file.diagnostics = [];
             this.pluginManager.emit('beforeFileValidate', { project: this, file: file });
-
             file.validate?.();
 
             this.pluginManager.emit('afterFileValidate', { project: this, file: file });

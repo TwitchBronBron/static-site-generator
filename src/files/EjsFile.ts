@@ -38,7 +38,11 @@ export class EjsFile extends TextFile {
                 file.diagnostics.push({
                     file: this,
                     range: createRange(lintError.line - 1, lintError.column - 1, lintError.line - 1, lintError.column),
-                    ...DiagnosticMessages.genericError(lintError.message)
+                    ...DiagnosticMessages.genericError(lintError.message),
+                    relatedInformation: [{
+                        file: file,
+                        message: 'Source file'
+                    }]
                 });
 
                 //if this looks like an ejs error, try to extract the line and message information
@@ -48,14 +52,22 @@ export class EjsFile extends TextFile {
                 file.diagnostics.push({
                     file: this,
                     ...DiagnosticMessages.genericError(ejsError.message),
-                    range: ejsError.line !== undefined ? createRange(ejsError.line - 1, 0, ejsError.line - 1, 0) : undefined
+                    range: ejsError.line !== undefined ? createRange(ejsError.line - 1, 0, ejsError.line - 1, 0) : undefined,
+                    relatedInformation: [{
+                        file: file,
+                        message: 'Source file'
+                    }]
                 });
 
                 //push the underlying error...better than nothing
             } else {
                 file.diagnostics.push({
                     file: this,
-                    ...DiagnosticMessages.genericError(error.message)
+                    ...DiagnosticMessages.genericError(error.message),
+                    relatedInformation: [{
+                        file: file,
+                        message: 'Source file'
+                    }]
                 });
             }
         }

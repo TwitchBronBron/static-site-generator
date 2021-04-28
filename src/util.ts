@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as moment from 'moment';
-import chalk from 'chalk';
+import * as chalk from 'chalk';
 import { Range } from './interfaces';
 
 /**

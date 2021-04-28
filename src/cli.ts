@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import * as yargs from 'yargs';
-import { printDiagnostic } from './diagnosticUtils';
 import { StaticSiteGenerator } from "./StaticSiteGenerator";
 yargs
     .usage('$0', 'A simple convention-based static site generator for markdown files')
@@ -31,13 +30,6 @@ yargs
         try {
             const generator = new StaticSiteGenerator();
             await generator.run(argv);
-            const diagnostics = generator.project.getDiagnostics();
-            if (diagnostics.length > 0) {
-                for (const diagnostic of diagnostics) {
-                    printDiagnostic(diagnostic);
-                }
-                throw new Error(`Found ${diagnostics.length} errors during publish`);
-            }
         } catch (e) {
             console.error(e);
             process.exit(1);

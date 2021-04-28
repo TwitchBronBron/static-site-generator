@@ -5,6 +5,8 @@ export function printDiagnostics(diagnostics?: Diagnostic[]) {
     if (diagnostics?.length > 0) {
         for (const diagnostic of diagnostics) {
             printDiagnostic(diagnostic);
+            //separate each diagnostic with an additional blank line
+            console.log('');
         }
     }
 }
@@ -19,6 +21,7 @@ export function printDiagnostic(
         [DiagnosticSeverity.Error]: chalk.red,
     };
 
+    const typeColorFunc = typeColor[diagnostic.severity] ?? function (text) { return text; };
     console.log('');
     console.log(
         chalk.cyan(diagnostic.file?.srcPath ?? '<unknown file>') +
@@ -29,7 +32,7 @@ export function printDiagnostic(
                 : 'line?:col?'
         ) +
         ' - ' +
-        typeColor[diagnostic.severity](diagnostic.severity) +
+        typeColorFunc(diagnostic.severity) +
         ' ' +
         chalk.grey(diagnostic.code) +
         ': ' +
@@ -49,7 +52,17 @@ export function printDiagnostic(
         let blankLineNumberText = chalk.bgWhite(' ' + chalk.bgWhite((diagnostic.range.start.line + 1).toString()) + ' ') + ' ';
         console.log(lineNumberText + diagnosticLine);
         console.log(blankLineNumberText + typeColor[diagnostic.severity](squigglyText));
+    }
+    for (const info of diagnostic.relatedInformation ?? []) {
         console.log('');
+        console.log('    ' + chalk.yellow(info.message));
+        console.log(
+            '    ' +
+            chalk.cyan(info.file?.srcPath ?? '<unknown file>') +
+            chalk.yellow(
+                info.range ? `:${info.range.start.line + 1}:${info.range.start.character + 1}` : ''
+            )
+        );
     }
 }
 

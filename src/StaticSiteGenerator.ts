@@ -6,6 +6,7 @@ import * as liveServer from 'live-server';
 import * as chalk from 'chalk';
 import { log } from './util';
 import { Project } from './Project';
+import { printDiagnostics } from './diagnosticUtils';
 
 export class StaticSiteGenerator {
     constructor() {
@@ -16,9 +17,18 @@ export class StaticSiteGenerator {
     public run(options: Options) {
         this.createProject(options);
         this.build();
+        const diagnostics = this.project.getDiagnostics();
+        printDiagnostics(diagnostics);
 
         if (this.project.options.watch) {
-            return this.watch();
+            //return a promise that never resolves
+            return new Promise(() => {
+                this.watch();
+            });
+        } else {
+            if (diagnostics.length > 0) {
+                throw new Error(`Found ${diagnostics.length} errors during publish`);
+            }
         }
     }
 
@@ -47,18 +57,31 @@ export class StaticSiteGenerator {
 
     private watcher!: chokidar.FSWatcher;
 
+    /**
+     * A handle for the watch mode interval that keeps the process alive.
+     * We need this so we can clear it if the builder is disposed
+     */
+    private watchInterval: NodeJS.Timer;
+
     private async watch() {
+        if (this.watchInterval) {
+            clearInterval(this.watchInterval);
+        }
+        //keep the process alive indefinitely by setting an interval that runs once every 12 days
+        this.watchInterval = setInterval(() => { }, 1073741824);
+
         liveServer.start({
             root: this.project.options.outDir!,
             open: true
         });
         this.watcher = chokidar.watch('**/*', {
             cwd: this.project.options.sourceDir,
-            ignoreInitial: false
+            ignoreInitial: true
         });
         const build = debounce(() => {
             try {
                 this.build();
+                printDiagnostics(this.project.getDiagnostics());
             } catch (e) {
                 console.error(e);
             }

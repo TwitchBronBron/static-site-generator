@@ -47,6 +47,13 @@ export interface Diagnostic {
     code: string;
     severity: DiagnosticSeverity;
     message: string;
+    relatedInformation?: DiagnosticRelatedInformation[]
+}
+
+export interface DiagnosticRelatedInformation {
+    file: File;
+    range?: Range;
+    message: string;
 }
 
 export enum DiagnosticSeverity {
