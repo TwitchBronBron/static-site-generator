@@ -12,5 +12,12 @@ export const DiagnosticMessages = {
         message: `Template could not be found in program with path "${templatePath}"`,
         code: 'core1001',
         severity: DiagnosticSeverity.Error
-    })
+    }),
+    ejsTemplateParseError: (message: string) => {
+        return {
+            message: `ejs parse error: ${message}`,
+            code: 'core1000',
+            severity: DiagnosticSeverity.Error
+        };
+    },
 };

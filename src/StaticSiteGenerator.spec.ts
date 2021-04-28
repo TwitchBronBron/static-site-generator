@@ -2,7 +2,9 @@ import { expect } from 'chai';
 import * as fsExtra from 'fs-extra';
 import * as path from 'path';
 import { assert } from 'sinon';
+import { printDiagnostics } from './diagnosticUtils';
 import { Options, StaticSiteGenerator } from './StaticSiteGenerator';
+import { createRange } from './util';
 
 const tempDir = path.resolve(path.join(__dirname, '..', '.tmp'));
 const sourceDir = path.join(tempDir, 'src');
@@ -99,6 +101,31 @@ describe('StaticSiteGenerator', () => {
         ]);
     });
 
+    it('parses ejs errors not handled by ejs-lint', async () => {
+        writeFiles({
+            'test.html': trim`
+                <html>
+                <%=hello%>
+            `,
+        });
+        const generator = await run();
+        const diagnostics = generator.project.getDiagnostics();
+        expect(diagnostics.map(x => x.message)).to.eql([
+            'hello is not defined'
+        ]);
+        expect(diagnostics.map(x => x.range)).to.eql([
+            createRange(1, 0, 1, 0)
+        ]);
+    });
+
+    it.only('temp test', async () => {
+        options.cwd = 'C:/projects/roku/vscode-brightscript-language';
+        options.outDir = 'dist-docs';
+        options.sourceDir = 'docs';
+        options.files = ['**/*'];
+        const generator = await run();
+        printDiagnostics(generator.project.getDiagnostics());
+    });
 });
 
 function expectFileToEqual(filePath: string, expectedText: string, trim = true) {

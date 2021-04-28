@@ -1,3 +1,4 @@
+import { TextFile } from "./files/TextFile";
 import type { Project } from "./Project";
 
 export interface File {
@@ -34,6 +35,10 @@ export interface File {
      * Validate the file (i.e. check it for invalid syntax or issues)
      */
     validate?();
+    /**
+     * Certain files may be used as a template. If so, they need to implement this method so the program can use them to generate the full file
+     */
+    renderAsTemplate?(file: TextFile, content: string);
     /**
      * Publish the file to the outDir. This is where files should apply any transformantions to the source file
      */

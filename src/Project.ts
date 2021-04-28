@@ -5,10 +5,8 @@ import { printDiagnostic } from "./diagnosticUtils";
 import * as path from 'path';
 import { Options } from "./StaticSiteGenerator";
 import { TextFile } from "./files/TextFile";
-import { createRange, standardizePath } from "./util";
+import { standardizePath } from "./util";
 import { DiagnosticMessages } from "./DiagnosticMessages";
-import * as ejs from 'ejs';
-import * as ejsLint from 'ejs-lint';
 
 export class Project {
     constructor(
@@ -116,7 +114,7 @@ export class Project {
     /**
      * Get the template file for a given file
      */
-    public getTemplateFile(file: TextFile): TextFile {
+    public getTemplateFile(file: TextFile): File {
         //if the file specified a template, use that file (even if it doesn't exist...)
         if (file.attributes.template) {
             const templateSrcPath = standardizePath(path.dirname(file.srcPath), file.attributes.template);
@@ -126,13 +124,15 @@ export class Project {
                     ...DiagnosticMessages.missingTemplate(templateSrcPath)
                 });
             }
-            return this.files.get(templateSrcPath) as TextFile;
+            return this.files.get(templateSrcPath);
 
             //files outside of sourceDir
         } else if (!this.fileResidesInSourceDir(file)) {
             return this.files.get(
                 standardizePath(path.dirname(file.srcPath), '_template.html')
-            ) as TextFile;
+            ) ?? this.files.get(
+                standardizePath(path.dirname(file.srcPath), '_template.ejs')
+            );
 
             //files inside sourceDir
         } else {
@@ -140,69 +140,21 @@ export class Project {
 
             let dir = file.srcPath.replace(this.options.sourceDir + path.sep, '');
             while (dir = path.dirname(dir)) {
-
-                const templatePath = path.resolve(
-                    this.options.sourceDir,
-                    path.normalize(
-                        path.join(dir, '_template.html')
-                    )
-                );
-                if (this.files.has(templatePath)) {
-                    return this.files.get(templatePath) as TextFile;
+                for (const ext of ['.ejs', '.html']) {
+                    const templatePath = path.resolve(
+                        this.options.sourceDir,
+                        path.normalize(
+                            path.join(dir, '_template' + ext)
+                        )
+                    );
+                    if (this.files.has(templatePath)) {
+                        return this.files.get(templatePath);
+                    }
                 }
                 //quit the loop if we didn't find a template
                 if (dir === '.') {
                     return;
                 }
-            }
-        }
-    }
-
-    /**
-     * Render an Ejs file.
-     * @param template the text containing the ejs text
-     * @param content any inner content that should be bound do the `data.content` property
-     */
-    public renderEjs(file: TextFile, template: string, content: string) {
-        const data = {
-            //all the ejs data should be inside a `data` object so we don't have to deal with undefined variable errors in ejs
-            data: {
-                ...(file.attributes ?? {}),
-                file: file,
-                project: this,
-                content: content,
-                require: require
-            }
-        };
-        try {
-            return ejs.render(template, data);
-        } catch (e: unknown) {
-            const error = e as Error;
-            //scan the file with ejs-lint to figure out the actual syntax errors
-            const lintError = ejsLint(template, data);
-            if (lintError) {
-                //add diagnostic for syntax error
-                file.diagnostics.push({
-                    file: file,
-                    range: createRange(lintError.line - 1, lintError.column - 1, lintError.line - 1, lintError.column - 1),
-                    ...DiagnosticMessages.genericError(lintError.message)
-                });
-
-                //if this looks like an ejs error, try to extract the line and message information
-            } else if (error.message?.includes('>>')) {
-                //push the underlying error...better than nothing
-                file.diagnostics.push({
-                    file: file,
-                    ...DiagnosticMessages.genericError(error.message)
-                });
-
-            } else {
-                //push the underlying error...better than nothing
-                file.diagnostics.push({
-                    file: file,
-                    ...DiagnosticMessages.genericError(e)
-                });
-
             }
         }
     }
@@ -214,11 +166,11 @@ export class Project {
      */
     public generateWithTemplate(file: TextFile, content: string) {
         const templateFile = this.getTemplateFile(file);
-        if (templateFile) {
-            return this.renderEjs(file, templateFile.text, content);
+        if (templateFile?.renderAsTemplate) {
+            return templateFile.renderAsTemplate(file, content);
         } else {
-            //no template was found. return the content as-is
-            return content;
+            //no template was found. return the content as-is (or empty string)
+            return content ?? '';
         }
     }
 

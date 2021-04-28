@@ -1,6 +1,14 @@
 import * as chalk from "chalk";
 import { Diagnostic, DiagnosticSeverity } from "./interfaces";
 
+export function printDiagnostics(diagnostics?: Diagnostic[]) {
+    if (diagnostics?.length > 0) {
+        for (const diagnostic of diagnostics) {
+            printDiagnostic(diagnostic);
+        }
+    }
+}
+
 export function printDiagnostic(
     diagnostic: Diagnostic
 ) {

@@ -10,8 +10,8 @@
     "lint": "eslint \"src/**\"",
     "publish-coverage": "nyc report --reporter=text-lcov | coveralls",
     "preversion": "npm run build && npm run test",
-    "build-docs": "npm run build && node dist/cli.js --source-dir docs --out-dir .tmp/docs",
-    "watch-docs": "npm run build && node dist/cli.js --cwd C:/projects/roku/vscode-brightscript-language -s docs -o .tmp/docs --watch"
+    "build-docs": "npm run build && node dist/cli.js -s docs -o .tmp/docs",
+    "watch-docs": "npm run build && node -r source-map-support/register dist/cli.js --cwd C:/projects/roku/vscode-brightscript-language -s docs -o .tmp/docs --watch"
   },
   "bin": {
     "static-site-generator": "dist/cli.js"
