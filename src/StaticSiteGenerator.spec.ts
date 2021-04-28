@@ -40,12 +40,50 @@ describe('StaticSiteGenerator', () => {
         );
     });
 
-    it('compiles ejs in html files', async () => {
+    it('compiles ejs in ejs files', async () => {
         writeFiles({
-            'index.html': `<title><%="Page title"%></title>`
+            'index.ejs': `<title><%="Page title"%></title>`
         });
         await run();
         expectFileToEqual(`${outDir}/index.html`, `<title>Page title</title>`);
+    });
+
+    it('supports html as template', async () => {
+        writeFiles({
+            'file.md': `# header`,
+            '_template.html': `<title><!--content--></title>`
+        });
+        await run();
+        expectFileToEqual(`${outDir}/file.html`, `<title><h1 id="header">header</h1></title>`);
+    });
+
+    it('does not render files starting with underscore', async () => {
+        writeFiles({
+            '_file1.html': '',
+            '_file2.ejs': '',
+            '_file3.css': ''
+        });
+        await run();
+        expect(fsExtra.pathExistsSync(`${outDir}/_file1.html`)).to.be.false;
+        expect(fsExtra.pathExistsSync(`${outDir}/_file2.ejs`)).to.be.false;
+        expect(fsExtra.pathExistsSync(`${outDir}/_file2.html`)).to.be.false;
+        expect(fsExtra.pathExistsSync(`${outDir}/_file3.css`)).to.be.false;
+    });
+
+    it('supports html file with frontmatter', async () => {
+        writeFiles({
+            'file.html': trim`
+                ---
+                template: customTemplate.ejs
+                title: File!!!
+                ---
+                <i>Hello world</i>
+            `,
+            '_template.html': `<title><!--content--></title>`,
+            'customTemplate.ejs': `custom<%-data.content%>template`
+        });
+        await run();
+        expectFileToEqual(`${outDir}/file.html`, `custom<i>Hello world</i>template`);
     });
 
     it('compiles simple markdown file', async () => {
@@ -59,7 +97,7 @@ describe('StaticSiteGenerator', () => {
     it('transpiles markdown with default template and slot', async () => {
         writeFiles({
             'about.md': '*italic*',
-            '_template.html': `
+            '_template.ejs': `
                 <div id="content">
                     <%-data.content%>
                 </div>
@@ -81,7 +119,7 @@ describe('StaticSiteGenerator', () => {
                 ---
                 *italic*
             `,
-            '_template.html': `
+            '_template.ejs': `
                <title><%=data.title%></title>
             `
         });
@@ -93,7 +131,7 @@ describe('StaticSiteGenerator', () => {
 
     it('does not crash on ejs syntax errors', async () => {
         writeFiles({
-            'test.html': trim`<%=hello world%>`,
+            'test.ejs': trim`<%=hello world%>`,
         });
         const generator = await run();
         expect(generator.project.getDiagnostics().map(x => x.message)).to.eql([
@@ -103,7 +141,7 @@ describe('StaticSiteGenerator', () => {
 
     it('parses ejs errors not handled by ejs-lint', async () => {
         writeFiles({
-            'test.html': trim`
+            'test.ejs': trim`
                 <html>
                 <%=hello%>
             `,
@@ -118,7 +156,7 @@ describe('StaticSiteGenerator', () => {
         ]);
     });
 
-    it.only('temp test', async () => {
+    it.skip('temp test', async () => {
         options.cwd = 'C:/projects/roku/vscode-brightscript-language';
         options.outDir = 'dist-docs';
         options.sourceDir = 'docs';

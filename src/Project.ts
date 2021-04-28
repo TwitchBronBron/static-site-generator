@@ -167,7 +167,8 @@ export class Project {
     public generateWithTemplate(file: TextFile, content: string) {
         const templateFile = this.getTemplateFile(file);
         if (templateFile?.renderAsTemplate) {
-            return templateFile.renderAsTemplate(file, content);
+            //return template rendered (or empty string)
+            return templateFile.renderAsTemplate(file, content) ?? '';
         } else {
             //no template was found. return the content as-is (or empty string)
             return content ?? '';
@@ -177,8 +178,10 @@ export class Project {
     public publish() {
         for (const file of this.files.values()) {
             this.pluginManager.emit('beforeFilePublish', { project: this, file: file });
+            const startsWithUnderscore = path.basename(file.srcPath).startsWith('_');
 
-            if (file.skipPublish !== true) {
+            //skip publishing if the file starts with an underscore, or if the
+            if (!startsWithUnderscore) {
                 file.publish?.();
             }
 

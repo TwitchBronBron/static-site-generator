@@ -15,10 +15,6 @@ export interface File {
      */
     diagnostics: Diagnostic[];
     /**
-     * Indicates that this file should skip being published. (useful for skipping template publishing)
-     */
-    skipPublish?: boolean;
-    /**
      * Set by the project itself after the file is provided by the plugin
      */
     project?: Project;

@@ -1,6 +1,5 @@
 import { TextFile } from './TextFile';
 import * as fsExtra from 'fs-extra';
-import * as path from 'path';
 import * as ejs from 'ejs';
 import * as ejsLint from 'ejs-lint';
 import { createRange, getEjsError } from "../util";
@@ -15,11 +14,6 @@ export class EjsFile extends TextFile {
             srcPath,
             outPath.replace(/\.ejs$/i, '.html')
         );
-    }
-
-    public get skipPublish() {
-        //don't publish the template files themselves
-        return this.srcPath.toLowerCase().endsWith(`${path.sep}_template.ejs`);
     }
 
     public renderAsTemplate(file: TextFile, content: string) {
