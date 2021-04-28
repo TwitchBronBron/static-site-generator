@@ -9,9 +9,7 @@
     "test:nocover": "mocha",
     "lint": "eslint \"src/**\"",
     "publish-coverage": "nyc report --reporter=text-lcov | coveralls",
-    "preversion": "npm run build && npm run test",
-    "build-docs": "npm run build && node dist/cli.js -s docs -o .tmp/docs",
-    "watch-docs": "npm run build && node -r source-map-support/register dist/cli.js --cwd C:/projects/roku/vscode-brightscript-language -s docs -o .tmp/docs --watch"
+    "preversion": "npm run build && npm run test"
   },
   "bin": {
     "static-site-generator": "dist/cli.js"
