@@ -34,7 +34,11 @@ export function writeFiles(files: Record<string, string>) {
 
 export async function run(opts = options) {
     const generator = new StaticSiteGenerator();
-    await generator.run(opts);
+    try {
+        await generator.run(opts);
+    } catch (e) {
+        console.error(e);
+    }
     return generator;
 }
 

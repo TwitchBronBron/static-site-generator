@@ -63,7 +63,7 @@ describe('StaticSiteGenerator', () => {
                 <i>Hello world</i>
             `,
             '_template.html': `<title><!--content--></title>`,
-            'customTemplate.ejs': `custom<%-data.content%>template`
+            'customTemplate.ejs': `custom<%-content%>template`
         });
         await run();
         expectFileToEqual(`${outDir}/file.html`, `custom<i>Hello world</i>template`);
@@ -77,12 +77,12 @@ describe('StaticSiteGenerator', () => {
         expectFileToEqual(`${outDir}/about.html`, '<h1 id="hello-world">Hello world</h1>');
     });
 
-    it('transpiles markdown with default template and slot', async () => {
+    it('transpiles markdown with default template', async () => {
         writeFiles({
             'about.md': '*italic*',
             '_template.ejs': `
                 <div id="content">
-                    <%-data.content%>
+                    <%-content%>
                 </div>
             `
         });
@@ -103,7 +103,7 @@ describe('StaticSiteGenerator', () => {
                 *italic*
             `,
             '_template.ejs': `
-               <title><%=data.title%></title>
+               <title><%=attributes.title%></title>
             `
         });
         await run();
