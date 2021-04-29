@@ -79,9 +79,3 @@ a {
 #content a {
     color: #2d9162;
 }
-
-#footer {
-    height: 100px;
-    border: 1px solid red;
-    width: 100%;
-}
