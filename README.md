@@ -18,6 +18,13 @@ npx statigen
 npx statigen --sourceDir source --outDir docs
 ```
 
+### Init
+You can create a new project by running the `init` command. This will create a new directory and copy the default statigen template project.
+
+```bash
+npx statigen init path/to/new/folder
+```
+
 ## Templates
 By default, html and markdown files will look for a file called `_template` at their level or above.
 
