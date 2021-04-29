@@ -2,6 +2,7 @@ import type { Diagnostic, File } from '../interfaces';
 import * as fsExtra from 'fs-extra';
 import type { Project } from '../Project';
 import * as frontMatter from 'front-matter';
+import { getTitleFromFilePath } from '../util';
 
 export class TextFile implements File {
     constructor(
@@ -32,6 +33,17 @@ export class TextFile implements File {
      * The attributes found in the file's frontmatter (if present)
      */
     public attributes: Record<string, any>;
+
+    /**
+     * Get the title of this file (generally used for html page title and tree view)
+     */
+    public get title() {
+        //use the title from attributes if available
+        if (this.attributes?.title) {
+            return this.attributes.title;
+        }
+        return getTitleFromFilePath(this.outPath);
+    }
 
     /**
      * Load the file from disk and parse any frontmatter

@@ -47,3 +47,14 @@ export function getEjsError(error: Error) {
         line: isNaN(lineNumber) ? undefined : lineNumber
     };
 }
+
+/**
+ * Given a path to a file, convert it into a title
+ * (remove extension, replace dashes with spaces, upper case first letter of each word)
+ */
+export function getTitleFromFilePath(filePath: string) {
+    //derive a title from the filename
+    const filename = path.basename(filePath).replace(/\.html$/i, '');
+    //remove dashes
+    return filename.split('-').join(' ');
+}

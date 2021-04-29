@@ -41,6 +41,14 @@ export class Project {
     public files = new Map<string, File>();
 
     /**
+     * Get the file with the specified path
+     */
+    public getFile<T extends File = File>(filePath: string) {
+        filePath = path.resolve(this.options.sourceDir, filePath).replace(/[\\\/]/g, path.sep);
+        return this.files.get(filePath) as T;
+    }
+
+    /**
      * Get a tree of all the html files based on their output paths
      */
     public getTree() {
