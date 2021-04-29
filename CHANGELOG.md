@@ -6,6 +6,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
-## [0.1.0] - 2021-04-17
-[0.1.0]:    https://github.com/rokucommunity/brighterscript/compare/204ff2955eb1670a36cbbfd4aa87b33549e39889...v0.1.0
+## [0.1.0] - 2021-04-29
+[0.1.0]:    https://github.com/rokucommunity/brighterscript/compare/f9cf20f9251513278d39e0353d6682a28af6f26c...v0.1.0
 initial project add
