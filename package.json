@@ -9,7 +9,7 @@
     "test:nocover": "mocha",
     "lint": "eslint \"src/**\"",
     "publish-coverage": "nyc report --reporter=text-lcov | coveralls",
-    "preversion": "npm run build && npm run test",
+    "preversion": "npm run build && npm run lint && npm run test",
     "watch-template-default": "npm run build && node dist/cli.js --sourceDir templates/default --outDir .tmp/templates/default --watch"
   },
   "bin": {
