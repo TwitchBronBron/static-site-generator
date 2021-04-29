@@ -5,6 +5,7 @@ html, body {
     width: 100%;
     overflow: auto;
     font-family: sans-serif;
+    --primary-color: #2d9162;
 }
 
 * {
@@ -21,8 +22,16 @@ a {
     color: inherit;
 }
 
+#content {
+    padding: 30px;
+}
+
+#content a {
+    color: var(--primary-color);
+}
+
 #navbar {
-    background-color: #2d9162;
+    background-color: var(--primary-color);
     width: 100%;
     height: 50px;
     box-shadow: 1px -9px 13px 9px #000000bf;
@@ -42,6 +51,7 @@ a {
 
 #sidebar {
     height: 100%;
+    padding-top: 20px;
     flex: 0 0 300px;
     border-right: 1px solid lightgrey;
 }
@@ -64,7 +74,7 @@ a {
     font-weight: bold;
 }
 
-#sidebar > .folder > .children {
+#sidebar>.folder>.children {
     padding-left: 0 !important;
 }
 
@@ -72,10 +82,9 @@ a {
     padding-left: 25px;
 }
 
-#content {
-    padding: 20px;
-}
-
-#content a {
-    color: #2d9162;
+code {
+    display: inline;
+    padding: .2em .4em;
+    background-color: #ebebeb;
+    border-radius: 6px;
 }

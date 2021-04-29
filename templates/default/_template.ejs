@@ -8,6 +8,8 @@
     <title>
         <%= attributes.title ?? path.basename(file.outPath) %>
     </title>
+    <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@10.7.2/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.7.2/highlight.min.js"></script>
     <link rel="stylesheet" href="/style.css" />
 </head>
 
@@ -25,7 +27,9 @@
             <% function renderNode(node) { %>
                 <% if (node.hasChildren) { %>
                     <div class="folder">
-                        <a class="name entry" href="/<%= node.path%>"><%= node.name %></a>
+                        <% if (node.name) { %>
+                            <a class="name entry" href="/<%= node.path%>"><%= node.name %></a>
+                        <% } %>
                         <% for(const child of node.children) { %>
                             <div class="children">
                                 <% renderNode(child); %>
