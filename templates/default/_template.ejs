@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<% const path = require('path'); %>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= attributes.title ?? path.basename(file.outPath) %>
+    </title>
+    <link rel="stylesheet" href="/style.css" />
+</head>
+
+<body>
+    <div id="navbar">
+        <a href="/">
+            <div id="logo">statigen default template</div>
+        </a>
+    </div>
+    <div id="body-area">
+        <div id="sidebar">
+
+            <% renderNode(project.getTree()) %>
+
+            <% function renderNode(node) { %>
+                <% if (node.hasChildren) { %>
+                    <div class="folder">
+                        <a class="name entry" href="/<%= node.path%>"><%= node.name %></a>
+                        <% for(const child of node.children) { %>
+                            <div class="children">
+                                <% renderNode(child); %>
+                            </div>
+                        <% } %>
+                    </div>
+                <% } else { %>
+                    <a class="entry" href="/<%= node.path %>"><%= node.file.attributes.title ?? path.parse(node.name).name %></a>
+                <% } %>
+            <% } %>
+        </div>
+        <div id="content">
+            <%- content %>
+        </div>
+    </div>
+    <script>hljs.highlightAll();</script>
+</body>
+
+</html>
