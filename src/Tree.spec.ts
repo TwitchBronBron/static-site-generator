@@ -1,12 +1,12 @@
 import { expect } from 'chai';
-import type { File } from './interfaces';
+import type { TextFile } from './files/TextFile';
 import { Tree } from './Tree';
 
 describe('Tree', () => {
-    let tree: Tree<File>;
+    let tree: Tree;
 
     beforeEach(() => {
-        tree = new Tree<File>(undefined, undefined);
+        tree = new Tree(undefined, undefined);
     });
 
     it('adds top-level file nodes', () => {
@@ -31,14 +31,80 @@ describe('Tree', () => {
             getLeafKeys(tree.sort())
         ).to.eql([
             'a/a',
-            'a/e',
             'a/b/c',
-            'a/b/d'
+            'a/b/d',
+            'a/e'
+        ]);
+    });
+
+    it('honors file-specified priority', () => {
+        tree.add('a', priority(1));
+        tree.add('b', priority(3));
+        tree.add('c', priority(2));
+
+        expect(
+            getLeafKeys(tree.sort())
+        ).to.eql([
+            'a',
+            'c',
+            'b'
+        ]);
+    });
+
+    it('sorts unprioritized items alphabetically at the bottom', () => {
+        tree.add('z', priority(1));
+        tree.add('d', priority(1));
+        tree.add('a');
+        tree.add('c');
+        tree.add('b');
+
+        expect(
+            getLeafKeys(tree.sort())
+        ).to.eql([
+            'd',
+            'z',
+            'a',
+            'b',
+            'c'
+        ]);
+    });
+
+    it('sorts branches based on direct child parentPriority values', () => {
+        tree.add('a/aa', parentPriority(2));
+        tree.add('b/bb', parentPriority(1));
+        tree.add('c/cc', parentPriority(3));
+        tree.add('d/dd', parentPriority(5));
+        tree.add('e/ee', parentPriority(4));
+
+        expect(
+            getLeafKeys(tree.sort())
+        ).to.eql([
+            'b/bb',
+            'a/aa',
+            'c/cc',
+            'e/ee',
+            'd/dd'
         ]);
     });
 });
 
-function getLeafKeys<T>(tree: Tree<T>, parentKey?: string) {
+function priority(value: number) {
+    return {
+        attributes: {
+            priority: value
+        }
+    } as any as TextFile;
+}
+
+function parentPriority(value: number) {
+    return {
+        attributes: {
+            parentPriority: value
+        }
+    } as any as TextFile;
+}
+
+function getLeafKeys(tree: Tree, parentKey?: string) {
     const myKey = parentKey ? parentKey + '/' + tree.name : tree.name;
     const keys = [] as string[];
     //only keep the leaf keys

@@ -8,6 +8,7 @@ import type { TextFile } from './files/TextFile';
 import { standardizePath } from './util';
 import { DiagnosticMessages } from './DiagnosticMessages';
 import { Tree } from './Tree';
+import * as fsExtra from 'fs-extra';
 
 export class Project {
     constructor(
@@ -44,7 +45,7 @@ export class Project {
      */
     public getTree() {
         if (!this.cache.tree) {
-            this.cache.tree = new Tree<File>(undefined, undefined);
+            this.cache.tree = new Tree(undefined, undefined);
             for (let file of this.files.values()) {
                 const filename = path.basename(file.outPath);
 
@@ -103,10 +104,15 @@ export class Project {
      * Remove a file from the project
      */
     public removeFile(srcPath: string) {
+        srcPath = path.resolve(this.options.sourceDir, srcPath);
         const file = this.files.get(srcPath);
         if (file) {
             this.pluginManager.emit('onFileRemove', { project: this, file: file });
             this.files.delete(srcPath);
+            //delete the file from the outDir too
+            if (fsExtra.pathExistsSync(file.outPath)) {
+                fsExtra.removeSync(file.outPath);
+            }
         }
     }
 
