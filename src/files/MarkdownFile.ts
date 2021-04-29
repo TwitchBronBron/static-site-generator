@@ -18,11 +18,7 @@ export class MarkdownFile extends TextFile {
             renderer: {
                 heading: ((text, level, raw, slugger) => {
                     const id = slugger.slug(text);
-                    return `
-                        <a href="#${id}">
-                            <h${level} id="${id}" class="heading">${text}</h${level}>
-                        </a>
-                    `;
+                    return `<a href="#${id}"><h${level} id="${id}">${text}</h${level}></a>`;
                 })
             }
         });

@@ -37,7 +37,7 @@ describe('StaticSiteGenerator', () => {
             '_template.html': `<title><!--content--></title>`
         });
         await run();
-        expectFileToEqual(`${outDir}/file.html`, `<title><h1 id="header">header</h1></title>`);
+        expectFileToEqual(`${outDir}/file.html`, `<title><a href="#header"><h1 id="header">header</h1></a></title>`);
     });
 
     it('does not render files starting with underscore', async () => {
@@ -74,7 +74,7 @@ describe('StaticSiteGenerator', () => {
             'about.md': '# Hello world'
         });
         await run();
-        expectFileToEqual(`${outDir}/about.html`, '<h1 id="hello-world">Hello world</h1>');
+        expectFileToEqual(`${outDir}/about.html`, '<a href="#hello-world"><h1 id="hello-world">Hello world</h1></a>');
     });
 
     it('transpiles markdown with default template', async () => {
