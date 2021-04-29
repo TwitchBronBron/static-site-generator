@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "description": "A static site generator that supports html, ejs, and markdown source files",
   "main": "dist/index.js",
+  "keywords": [
+    "static-site-generator",
+    "staticSiteGenerator"
+  ],
   "scripts": {
     "build": "tsc",
     "test": "nyc mocha",
@@ -15,6 +19,12 @@
   "bin": {
     "static-site-generator": "dist/cli.js"
   },
+  "files": [
+    "dist/**/*",
+    "templates/**/*",
+    "LICENSE.txt",
+    "README.md"
+  ],
   "author": "Bronley Plumb",
   "license": "MIT",
   "dependencies": {
