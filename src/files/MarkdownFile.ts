@@ -14,6 +14,18 @@ export class MarkdownFile extends TextFile {
     }
 
     public publish() {
+        marked.use({
+            renderer: {
+                heading: ((text, level, raw, slugger) => {
+                    const id = slugger.slug(text);
+                    return `
+                        <a href="#${id}">
+                            <h${level} id="${id}" class="heading">${text}</h${level}>
+                        </a>
+                    `;
+                })
+            }
+        });
         let html = marked(this.text).trim();
         //remove trailing newline
         fsExtra.outputFileSync(
