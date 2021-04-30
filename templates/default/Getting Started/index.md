@@ -1,5 +1,4 @@
 ---
-title: Adding pages
 parentPriority: 3
 ---
 # Adding Pages

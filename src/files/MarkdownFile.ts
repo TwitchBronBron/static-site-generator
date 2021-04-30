@@ -17,7 +17,7 @@ export class MarkdownFile extends TextFile {
     /**
      * Get the title of this file (generally used for html page title and tree view)
      */
-    public get title() {
+    public get title(): string {
         //use the title from attributes if available
         if (this.attributes?.title) {
             return this.attributes.title;
@@ -29,7 +29,9 @@ export class MarkdownFile extends TextFile {
      * If the markdown code starts with a h1 header, return its text
      */
     private getH1Text() {
+        console.log(':::' + this.text + ':::');
         const [, h1Text] = /^#\s+(.+)/.exec(this.text.trim()) ?? [];
+        console.log(h1Text);
         return h1Text;
     }
 

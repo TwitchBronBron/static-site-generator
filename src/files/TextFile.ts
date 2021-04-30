@@ -37,7 +37,7 @@ export class TextFile implements File {
     /**
      * Get the title of this file (generally used for html page title and tree view)
      */
-    public get title() {
+    public get title(): string {
         //use the title from attributes if available
         if (this.attributes?.title) {
             return this.attributes.title;

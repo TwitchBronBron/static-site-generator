@@ -4,10 +4,11 @@ export class Tree {
     constructor(
         public name: string,
         public path: string,
+        public title?: string,
         public file?: TextFile,
         public children: Tree[] = []
     ) {
-
+        this.title = this.title ?? this.name;
     }
 
     public get hasChildren() {
@@ -23,14 +24,14 @@ export class Tree {
             if (search) {
                 node = search;
             } else {
-                const newNode = new Tree(part, path);
+                const newNode = new Tree(part, path, part);
                 node.children.push(newNode);
                 node = newNode;
             }
         }
         //now that we have the parent node, push the file
         node.children.push(
-            new Tree(filename, path, file)
+            new Tree(filename, path, file?.title ?? filename, file)
         );
     }
 

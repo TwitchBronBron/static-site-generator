@@ -28,7 +28,7 @@
                 <% if (node.hasChildren) { %>
                     <div class="folder">
                         <% if (node.name) { %>
-                            <a class="name entry" href="/<%= node.path%>"><%= node.name %></a>
+                            <a class="name entry" href="/<%= node.path%>"><%= node.title %></a>
                         <% } %>
                         <% for(const child of node.children) { %>
                             <div class="children">
@@ -37,7 +37,7 @@
                         <% } %>
                     </div>
                 <% } else { %>
-                    <a class="entry" href="/<%= node.path %>"><%= node.file.attributes.title ?? path.parse(node.name).name %></a>
+                    <a class="entry" href="/<%= node.path %>"><%= node.title %></a>
                 <% } %>
             <% } %>
         </div>

@@ -53,7 +53,7 @@ export class Project {
      */
     public getTree() {
         if (!this.cache.tree) {
-            this.cache.tree = new Tree(undefined, undefined);
+            this.cache.tree = new Tree(undefined, undefined, undefined);
             for (let file of this.files.values()) {
                 const filename = path.basename(file.outPath);
 
