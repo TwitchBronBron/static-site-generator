@@ -4,7 +4,7 @@ import * as chalk from 'chalk';
 import type { Range } from './interfaces';
 
 /**
- * Normalize, resolve, and standardize path.sep for a chunk of path parts
+ *
  */
 export function standardizePath(...parts: string[]) {
     //remove null or empty parts
@@ -12,6 +12,21 @@ export function standardizePath(...parts: string[]) {
 
     return path.normalize(
         path.resolve(...parts)
+    ).replace(/[\\\/]/g, path.sep);
+}
+
+
+/**
+ *  Normalize, resolve, and standardize path.sep for a chunk of path parts.A tagged template literal function for standardizing the path. This has to be defined as standalone function since it's a tagged template literal function,
+ * we can't use `object.tag` syntax.
+ */
+export function s(stringParts, ...expressions: any[]) {
+    let parts = [];
+    for (let i = 0; i < stringParts.length; i++) {
+        parts.push(stringParts[i], expressions[i]);
+    }
+    return path.normalize(
+        parts.filter(x => !!x).join(path.sep)
     ).replace(/[\\\/]/g, path.sep);
 }
 
@@ -57,4 +72,18 @@ export function getTitleFromFilePath(filePath: string) {
     const filename = path.basename(filePath).replace(/\.html$/i, '');
     //remove dashes
     return filename.split('-').join(' ');
+}
+
+/**
+ * Get a relative url based on the position of the template file and the host file
+ * @param url the URL relative to the `templateOutPath`
+ * @param templateOutPath the output path of the template
+ * @param hostOutPath the outPath of the host file (the file being published)
+ */
+export function getRelativeUrl(url: string, templateOutPath: string, hostOutPath: string) {
+    const relativePath = path.relative(
+        path.dirname(hostOutPath),
+        path.join(path.dirname(templateOutPath), url)
+    );
+    return relativePath.replace(/[\\\/]/g, '/');
 }

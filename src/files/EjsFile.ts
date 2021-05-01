@@ -2,7 +2,7 @@ import { TextFile } from './TextFile';
 import * as fsExtra from 'fs-extra';
 import * as ejs from 'ejs';
 import * as ejsLint from 'ejs-lint';
-import { createRange, getEjsError } from '../util';
+import { createRange, getEjsError, getRelativeUrl } from '../util';
 import { DiagnosticMessages } from '../DiagnosticMessages';
 
 export class EjsFile extends TextFile {
@@ -24,7 +24,13 @@ export class EjsFile extends TextFile {
             content: content,
             file: file,
             project: this.project,
-            require: require
+            require: require,
+            /**
+             * Resolves the url (relative to template file) based on the relative position to the host file
+             */
+            url: (url: string) => {
+                return getRelativeUrl(url, this.outPath, file.outPath);
+            }
         };
         try {
             return ejs.render(this.text, data);
