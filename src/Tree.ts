@@ -48,8 +48,8 @@ export class Tree {
 
             //sort the children of this node
             node.children.sort((a, b) => {
-                let aPriority = this.getPriority(a) ?? Number.MAX_SAFE_INTEGER;
-                let bPriority = this.getPriority(b) ?? Number.MAX_SAFE_INTEGER;
+                let aPriority = this.getPriority(a) ?? 1000;
+                let bPriority = this.getPriority(b) ?? 1000;
 
                 //sort by file priority
                 if (aPriority > bPriority) {
