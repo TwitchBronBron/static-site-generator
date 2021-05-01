@@ -24,6 +24,18 @@ describe('StaticSiteGenerator', () => {
         expect(generator.project.getFile<TextFile>('index.md').title).to.eql('title1');
     });
 
+    it('computes title from h1 that has frontmatter', async () => {
+        writeFiles({
+            'index.md': trim`
+                ---
+                priority: 2
+                ---
+                # title1`
+        });
+        const generator = await run();
+        expect(generator.project.getFile<TextFile>('index.md').title).to.eql('title1');
+    });
+
     it('does not compute title from h1 lower in the page', async () => {
         writeFiles({
             'index.md': `Hello\n# title1`

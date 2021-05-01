@@ -139,6 +139,17 @@ describe('StaticSiteGenerator', () => {
         ]);
     });
 
+    it('computes tree title from markdown header', async () => {
+        writeFiles({
+            'SomeFolder/SomeFile.md': trim`
+                # MyHeader
+                some content
+            `
+        });
+        const generator = await run();
+        expect(generator.project.getTree().children[0].children[0].title).to.eql('MyHeader');
+    });
+
     it.skip('temp test', async () => {
         options.cwd = 'C:/projects/roku/vscode-brightscript-language';
         options.outDir = 'dist-docs';
