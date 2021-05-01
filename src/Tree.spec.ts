@@ -86,6 +86,16 @@ describe('Tree', () => {
             'd/dd'
         ]);
     });
+
+    it('picks the correct child for calculating path in the parent node', () => {
+        tree.add('introduction.html');
+        tree.add('Debugging/ComponentLibraries.html', parentPriority(1));
+        tree.add('Debugging/index.html', priority(1));
+        tree.sort();
+        const debuggingNode = tree.children[0];
+        expect(debuggingNode.name).to.eql('Debugging');
+        expect(debuggingNode.path).to.eql('Debugging');
+    });
 });
 
 function priority(value: number) {

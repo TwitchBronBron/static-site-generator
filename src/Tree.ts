@@ -19,12 +19,14 @@ export class Tree {
         const parts = path.split(/[\\\/]/);
         let node = this as any as Tree;
         const filename = parts.pop();
-        for (const part of parts) {
+        for (let i = 0; i < parts.length; i++) {
+            const part = parts[i];
+            const partPath = parts.slice(0, i + 1).join('/');
             const search = node.children.find(x => x.name === part);
             if (search) {
                 node = search;
             } else {
-                const newNode = new Tree(part, path, part);
+                const newNode = new Tree(part, partPath, part);
                 node.children.push(newNode);
                 node = newNode;
             }
