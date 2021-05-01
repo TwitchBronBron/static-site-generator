@@ -24,6 +24,7 @@ a {
 
 #content {
     padding: 30px;
+    overflow: auto;
 }
 
 #content a {
@@ -46,13 +47,14 @@ a {
 #body-area {
     display: flex;
     flex-direction: row;
-    height: 100%;
+    height: calc(100% - 50px);
 }
 
 #sidebar {
     height: 100%;
     padding-top: 20px;
     flex: 0 0 300px;
+    overflow: auto;
     border-right: 1px solid lightgrey;
 }
 
