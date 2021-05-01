@@ -11,7 +11,7 @@ import { printDiagnostics } from './diagnosticUtils';
 export class StaticSiteGenerator {
     public project: Project;
 
-    public run(options: Options) {
+    public async run(options: Options) {
         this.createProject(options);
         this.build();
         const diagnostics = this.project.getDiagnostics();
