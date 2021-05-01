@@ -6,8 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [0.2.1] - 2021-04-30
+[0.2.1]: https://github.com/rokucommunity/brighterscript/compare/0.1.0...v0.2.0
+### Fixed
+ - remove javascript console logging in markdown file
+
+
+
 ## [0.2.0] - 2021-04-29
-[0.2.0]:    https://github.com/rokucommunity/brighterscript/compare/0.1.0...v0.2.0
+[0.2.0]: https://github.com/rokucommunity/brighterscript/compare/0.1.0...v0.2.0
 ### Added
  - hyperlink wrappers around all markdown headers
  - auto-calculate the name of a markdown page based on a h1 at the top of the file
@@ -17,5 +24,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## [0.1.0] - 2021-04-29
-[0.1.0]:    https://github.com/rokucommunity/brighterscript/compare/f9cf20f9251513278d39e0353d6682a28af6f26c...v0.1.0
+[0.1.0]: https://github.com/rokucommunity/brighterscript/compare/f9cf20f9251513278d39e0353d6682a28af6f26c...v0.1.0
 initial project add
