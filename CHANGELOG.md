@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [0.3.0] - 2021-04-30
+[0.3.0]: https://github.com/rokucommunity/brighterscript/compare/0.2.2...v0.3.0
+### Add
+ - `url` function for ejs templates to resolve URLs relative to the current file's outPath, based on the template file's outPath
+### Changed
+ - default tree priority to 1000 so pages can be intentionally pushed lower
+### Fixed
+ - Improved scrolling in default template
+
 ## [0.2.2] - 2021-04-30
 [0.2.2]: https://github.com/rokucommunity/brighterscript/compare/0.2.1...v0.2.2
 ### Fixed
