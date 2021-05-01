@@ -29,9 +29,7 @@ export class MarkdownFile extends TextFile {
      * If the markdown code starts with a h1 header, return its text
      */
     private getH1Text() {
-        console.log(':::' + this.text + ':::');
         const [, h1Text] = /^#\s+(.+)/.exec(this.text.trim()) ?? [];
-        console.log(h1Text);
         return h1Text;
     }
 
