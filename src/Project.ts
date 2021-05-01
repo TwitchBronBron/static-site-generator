@@ -67,7 +67,7 @@ export class Project {
             }
             this.cache.tree.sort();
         }
-        return this.cache.tree;
+        return this.cache.tree as Tree;
     }
 
     /**
