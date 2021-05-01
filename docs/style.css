@@ -1,0 +1,90 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    font-family: sans-serif;
+    --primary-color: #2d9162;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+#content {
+    padding: 30px;
+}
+
+#content a {
+    color: var(--primary-color);
+}
+
+#navbar {
+    background-color: var(--primary-color);
+    width: 100%;
+    height: 50px;
+    box-shadow: 1px -9px 13px 9px #000000bf;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    flex-shrink: 0;
+    align-self: flex-start;
+    color: white;
+}
+
+#body-area {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+}
+
+#sidebar {
+    height: 100%;
+    padding-top: 20px;
+    flex: 0 0 300px;
+    border-right: 1px solid lightgrey;
+}
+
+#sidebar .entry {
+    padding: 15px;
+    cursor: pointer;
+    display: block;
+}
+
+#sidebar a:hover {
+    background-color: rgba(0, 0, 0, .05);
+}
+
+.folder {
+    display: block;
+}
+
+.folder .name {
+    font-weight: bold;
+}
+
+#sidebar>.folder>.children {
+    padding-left: 0 !important;
+}
+
+.folder .children {
+    padding-left: 25px;
+}
+
+code {
+    display: inline;
+    padding: .2em .4em;
+    background-color: #ebebeb;
+    border-radius: 6px;
+}
