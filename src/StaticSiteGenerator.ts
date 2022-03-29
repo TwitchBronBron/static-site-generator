@@ -1,5 +1,5 @@
 import * as chokidar from 'chokidar';
-import * as globby from 'globby';
+import * as fastGlob from 'fast-glob';
 import * as path from 'path';
 import * as debounce from 'debounce';
 import * as liveServer from 'live-server';
@@ -33,7 +33,7 @@ export class StaticSiteGenerator {
     private createProject(options: Options) {
         this.project = new Project(options);
         //load all the files into the project
-        const filePaths = globby
+        const filePaths = fastGlob
             //find all the files
             .sync(this.project.options.files, {
                 cwd: this.project.options.sourceDir,
