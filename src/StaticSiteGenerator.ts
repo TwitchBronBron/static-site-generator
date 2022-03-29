@@ -1,4 +1,4 @@
-import * as chokidar from 'chokidar';
+import * as parcelWatcher from '@parcel/watcher';
 import * as fastGlob from 'fast-glob';
 import * as path from 'path';
 import * as debounce from 'debounce';
@@ -20,8 +20,8 @@ export class StaticSiteGenerator {
         if (this.project.options.watch) {
             //return a promise that never resolves
             return new Promise(() => {
-                // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                this.watch();
+                // eslint-disable-next-line no-void
+                void this.watch();
             });
         } else {
             if (diagnostics.length > 0) {
@@ -55,7 +55,7 @@ export class StaticSiteGenerator {
         log('Done!');
     }
 
-    private watcher!: chokidar.FSWatcher;
+    private watcher!: parcelWatcher.AsyncSubscription;
 
     /**
      * A handle for the watch mode interval that keeps the process alive.
@@ -63,7 +63,8 @@ export class StaticSiteGenerator {
      */
     private watchInterval: NodeJS.Timer;
 
-    private watch() {
+    private async watch() {
+        console.log('Starting watcher');
         if (this.watchInterval) {
             clearInterval(this.watchInterval);
         }
@@ -75,10 +76,6 @@ export class StaticSiteGenerator {
             open: true,
             logLevel: 0
         });
-        this.watcher = chokidar.watch('**/*', {
-            cwd: this.project.options.sourceDir,
-            ignoreInitial: true
-        });
         const build = debounce(() => {
             try {
                 this.build();
@@ -88,21 +85,26 @@ export class StaticSiteGenerator {
             }
         });
 
-        this.watcher.on('add', (file) => {
-            log('File added', chalk.green(file));
-            this.project.setFile(file);
+        console.log('Watching dir: ', this.project.options.sourceDir);
+        this.watcher = await parcelWatcher.subscribe(this.project.options.sourceDir, (err, events) => {
+            for (const event of events ?? []) {
+                if (event.type === 'create') {
+                    log('File added', chalk.green(event.path));
+                    this.project.setFile(event.path);
+                } else if (event.type === 'update') {
+                    log('File changed', chalk.green(event.path));
+                    this.project.setFile(event.path);
+                } else if (event.type === 'delete') {
+                    log('File removed', chalk.green(event.path));
+                    this.project.removeFile(event.path);
+                }
+            }
             build();
         });
-        this.watcher.on('change', (file) => {
-            log('File changed', chalk.green(file));
-            this.project.setFile(file);
-            build();
-        });
-        this.watcher.on('unlink', (file) => {
-            log('File removed', chalk.green(file));
-            this.project.removeFile(file);
-            build();
-        });
+    }
+
+    public async destroy() {
+        await this.watcher?.unsubscribe();
     }
 }
 
