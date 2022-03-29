@@ -6,31 +6,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
-## [0.3.0] - 2021-04-30
-[0.3.0]: https://github.com/rokucommunity/brighterscript/compare/0.2.2...v0.3.0
-### Add
+## [0.3.0](https://github.com/rokucommunity/brighterscript/compare/0.2.2...v0.3.0) - 2021-04-30
+### Added
  - `url` function for ejs templates to resolve URLs relative to the current file's outPath, based on the template file's outPath
 ### Changed
  - default tree priority to 1000 so pages can be intentionally pushed lower
 ### Fixed
  - Improved scrolling in default template
 
-## [0.2.2] - 2021-04-30
-[0.2.2]: https://github.com/rokucommunity/brighterscript/compare/0.2.1...v0.2.2
+
+
+## [0.2.2](https://github.com/rokucommunity/brighterscript/compare/0.2.1...v0.2.2) - 2021-04-30
 ### Fixed
  - incorrect tree folder path
 
 
 
-## [0.2.1] - 2021-04-30
-[0.2.1]: https://github.com/rokucommunity/brighterscript/compare/0.2.0...v0.2.1
+## [0.2.1](https://github.com/rokucommunity/brighterscript/compare/0.2.0...v0.2.1) - 2021-04-30
 ### Fixed
  - remove javascript console logging in markdown file
 
 
 
-## [0.2.0] - 2021-04-29
-[0.2.0]: https://github.com/rokucommunity/brighterscript/compare/0.1.0...v0.2.0
+## [0.2.0](https://github.com/rokucommunity/brighterscript/compare/0.1.0...v0.2.0) - 2021-04-29
 ### Added
  - hyperlink wrappers around all markdown headers
  - auto-calculate the name of a markdown page based on a h1 at the top of the file
@@ -39,6 +37,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
-## [0.1.0] - 2021-04-29
-[0.1.0]: https://github.com/rokucommunity/brighterscript/compare/f9cf20f9251513278d39e0353d6682a28af6f26c...v0.1.0
+## [0.1.0](https://github.com/rokucommunity/brighterscript/compare/f9cf20f9251513278d39e0353d6682a28af6f26c...v0.1.0) - 2021-04-29
 initial project add
