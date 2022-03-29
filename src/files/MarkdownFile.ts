@@ -1,5 +1,5 @@
 import { TextFile } from './TextFile';
-import * as marked from 'marked';
+import { marked } from 'marked';
 import * as fsExtra from 'fs-extra';
 import { getTitleFromFilePath } from '../util';
 
