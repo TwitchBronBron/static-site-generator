@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [0.3.1](https://github.com/rokucommunity/brighterscript/compare/0.3.0...v0.3.1) - 2022-03-29
+### Fixed
+ - broken file system watcher for dev mode (switched to @parcel/watcher and away from chokidar).
+ - npm audit issues
+
+
+
 ## [0.3.0](https://github.com/rokucommunity/brighterscript/compare/0.2.2...v0.3.0) - 2021-04-30
 ### Added
  - `url` function for ejs templates to resolve URLs relative to the current file's outPath, based on the template file's outPath
