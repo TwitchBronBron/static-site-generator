@@ -16,6 +16,16 @@
             "problemMatcher": []
         },
         {
+            "label": "watch",
+            "type": "shell",
+            "command": "npm run watch",
+            "presentation": {
+                "group": "watch",
+            },
+            "isBackground": true,
+            "problemMatcher": "$tsc-watch"
+        },
+        {
             "label": "test",
             "type": "shell",
             "command": "npm",
