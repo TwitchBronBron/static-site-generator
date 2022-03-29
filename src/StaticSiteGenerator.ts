@@ -2,7 +2,7 @@ import * as chokidar from 'chokidar';
 import * as fastGlob from 'fast-glob';
 import * as path from 'path';
 import * as debounce from 'debounce';
-import * as liveServer from 'live-server';
+import * as liveServer from '@compodoc/live-server';
 import * as chalk from 'chalk';
 import { log } from './util';
 import { Project } from './Project';
