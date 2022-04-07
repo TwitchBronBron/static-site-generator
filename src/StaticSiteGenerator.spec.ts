@@ -2,8 +2,8 @@ import { expect } from 'chai';
 import * as fsExtra from 'fs-extra';
 import { assert } from 'sinon';
 import { printDiagnostics } from './diagnosticUtils';
-import { createRange } from './util';
-import { trim, trimLeading, writeFiles, run, outDir, options } from './testHelpers.spec';
+import { createRange, s } from './util';
+import { trim, trimLeading, writeFiles, run, outDir, options, sourceDir } from './testHelpers.spec';
 
 describe('StaticSiteGenerator', () => {
     it('copies static files', async () => {
@@ -148,6 +148,14 @@ describe('StaticSiteGenerator', () => {
         });
         const generator = await run();
         expect(generator.project.getTree().children[0].children[0].title).to.eql('MyHeader');
+    });
+
+    it('calculates outDir from absolute path', async () => {
+        const generator = await run();
+        const filePath = s`${sourceDir}/sub1\\sub2/index.md`;
+        fsExtra.outputFileSync(filePath, '#stuff');
+        const file = generator.project.setFile(filePath);
+        expect(s`${file.outPath}`).to.eql(s`${outDir}/sub1/sub2/index.html`);
     });
 
     it.skip('temp test', async () => {
