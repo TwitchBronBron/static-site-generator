@@ -5,7 +5,7 @@ import { printDiagnostic } from './diagnosticUtils';
 import * as path from 'path';
 import type { Options } from './StaticSiteGenerator';
 import type { TextFile } from './files/TextFile';
-import { standardizePath } from './util';
+import { replacePath, standardizePath } from './util';
 import { DiagnosticMessages } from './DiagnosticMessages';
 import { Tree } from './Tree';
 import * as fsExtra from 'fs-extra';
@@ -73,14 +73,18 @@ export class Project {
     /**
      * Add or replace a file in the project
      */
-    public setFile(srcPath: string);
-    public setFile(fileEntry: { src: string; dest: string });
-    public setFile(param: string | { src: string; dest: string }) {
+    public setFile(srcPath: string): File;
+    public setFile(fileEntry: { src: string; dest: string }): File;
+    public setFile(param: string | { src: string; dest: string }): File {
         let srcPath: string;
         let outPath: string;
         if (typeof param === 'string') {
             srcPath = path.resolve(this.options.sourceDir, param);
-            outPath = path.resolve(this.options.outDir, param);
+            outPath = replacePath(
+                path.resolve(this.options.outDir, param),
+                this.options.sourceDir,
+                this.options.outDir
+            );
         } else {
             srcPath = path.resolve(this.options.sourceDir, param.src);
             outPath = path.resolve(this.options.outDir, param.dest);
@@ -106,6 +110,7 @@ export class Project {
         file.load?.();
 
         this.pluginManager.emit('afterFileLoad', { project: this, file: file });
+        return file;
     }
 
     /**

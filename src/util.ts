@@ -87,3 +87,16 @@ export function getRelativeUrl(url: string, templateOutPath: string, hostOutPath
     );
     return relativePath.replace(/[\\\/]/g, '/');
 }
+
+export function toUnixPath(thePath: string) {
+    return thePath.replace(/[\/\\]/g, '/');
+}
+
+export function replacePath(subject: string, search: string, replace: string) {
+    const idx = toUnixPath(subject).indexOf(toUnixPath(search));
+    if (idx > -1) {
+        return replace + subject.substring(idx + search.length);
+    } else {
+        return subject;
+    }
+}
