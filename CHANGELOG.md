@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [0.3.2](https://github.com/rokucommunity/brighterscript/compare/0.3.1...v0.3.2) - 2022-04-07
+### Fixed
+ - infinite deploy bug in the watcher related to absolute paths
+
+
+
 ## [0.3.1](https://github.com/rokucommunity/brighterscript/compare/0.3.0...v0.3.1) - 2022-03-29
 ### Fixed
  - broken file system watcher for dev mode (switched to @parcel/watcher and away from chokidar).
