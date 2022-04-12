@@ -31,6 +31,21 @@ describe('StaticSiteGenerator', () => {
         expectFileToEqual(`${outDir}/index.html`, `<title>Page title</title>`);
     });
 
+    it('reads folder name from children files', async () => {
+        writeFiles({
+            'some-folder/index.ejs': trim`
+                ---
+                template: customTemplate.ejs
+                parentTitle: Overridden Title
+                ---
+                <title>Page title</title>
+            `
+        });
+        const generator = await run();
+        const tree = generator.project.getTree();
+        expect(tree.children[0].title).to.eql('Overridden Title');
+    });
+
     it('supports html as template', async () => {
         writeFiles({
             'file.md': `# header`,

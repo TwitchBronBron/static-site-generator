@@ -4,11 +4,11 @@ export class Tree {
     constructor(
         public name: string,
         public path: string,
-        public title?: string,
+        private _title?: string,
         public file?: TextFile,
         public children: Tree[] = []
     ) {
-        this.title = this.title ?? this.name;
+        this._title = this._title ?? this.name;
     }
 
     public get hasChildren() {
@@ -73,11 +73,26 @@ export class Tree {
             return node.file?.attributes.priority;
         }
         for (const child of node.children) {
-            const childPriority = child.file?.attributes.parentPriority;
-            if (childPriority) {
-                return childPriority;
+            const priorityFromChild = child.file?.attributes.parentPriority;
+            if (priorityFromChild) {
+                return priorityFromChild;
             }
         }
+    }
+
+    /**
+     * Given a node, find its priority. If the node doesn't have a priority, look through its direct children for a `parentPriority` attribute
+     */
+    public get title() {
+        if (this.hasChildren) {
+            for (const child of this.children) {
+                const titleFromChild = child.file?.attributes.parentTitle;
+                if (titleFromChild) {
+                    return titleFromChild;
+                }
+            }
+        }
+        return this.file?.attributes.title ?? this._title;
     }
 }
 

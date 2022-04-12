@@ -60,3 +60,27 @@ __dist/file1.html
 </body>
 </html>
 ```
+
+## Frontmatter
+
+You can add frontmatter to your markdown files which can be used to override certain items. Here are the currently supported values:
+
+- `priority` - a number specifying the priority of a file
+- `parentPriority` - a number to reorder the parent folder for a file
+- `title` - a title to use instead of the filename
+- `parentTitle` - a title to use for the parent folder instead of the folder name
+- `template` - a path to a custom template to use for the current file
+
+Here's how you use it:
+
+`some-folder/some-file.md`
+```
+---
+priority: 1
+parentPriority: 3
+title: Some File
+parentTitle: Some Folder
+template: custom-template.ejs
+---
+Actual content
+```
