@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [0.4.1](https://github.com/rokucommunity/brighterscript/compare/0.4.0...v0.4.1) - 2022-04-13
+### Changed
+ - rolled-back to ejs@3.0.2 to eliminate npm audit issues
+
+
+
 ## [0.4.0](https://github.com/rokucommunity/brighterscript/compare/0.3.2...v0.4.0) - 2022-04-12
 ### Added
  - `parentTitle` frontmatter to help rename parent folders
