@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [0.4.3](https://github.com/rokucommunity/brighterscript/compare/0.4.2...v0.4.3) - 2022-04-13
+### Changed
+ - locked to exactly ejs-lint@1.1.0 to eliminate npm audit issues
+
+
+
 ## [0.4.2](https://github.com/rokucommunity/brighterscript/compare/0.4.1...v0.4.2) - 2022-04-13
 ### Changed
  - locked to exactly ejs@3.0.2 to eliminate npm audit issues
