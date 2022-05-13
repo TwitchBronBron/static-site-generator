@@ -35,7 +35,7 @@ export class InitCommand {
                     watch: 'statigen --watch'
                 },
                 dependencies: {
-                    statigen: `^${'0.1.0' ?? await latestVersion('statigen')}`
+                    statigen: `^${await latestVersion('statigen')}`
                 }
             }, null, 4)
         );

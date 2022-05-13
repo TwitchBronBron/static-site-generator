@@ -60,6 +60,7 @@ module.exports = {
             'error',
             'always'
         ],
+        '@typescript-eslint/parameter-properties': 'off',
         '@typescript-eslint/prefer-for-of': 'off',
         '@typescript-eslint/prefer-readonly': 'off',
         '@typescript-eslint/prefer-readonly-parameter-types': 'off',
