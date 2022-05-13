@@ -1,6 +1,6 @@
 {
   "name": "statigen",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "description": "A static site generator that supports html, ejs, and markdown source files",
   "main": "dist/index.js",
   "keywords": [
