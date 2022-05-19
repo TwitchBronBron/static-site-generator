@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [0.4.5](https://github.com/rokucommunity/brighterscript/compare/0.4.4...v0.4.5) - 2022-05-19
+### Fixed
+ - made `fs-extra` a `dependency` instead of `devDependency`
+
+
+
 ## [0.4.4](https://github.com/rokucommunity/brighterscript/compare/0.4.3...v0.4.4) - 2022-05-13
 ### Changed
  - upgrade to ejs@3.1.8 and ejs-lint@1.2.2 to mitigate npm security issues
