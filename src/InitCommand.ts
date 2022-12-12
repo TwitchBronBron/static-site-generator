@@ -1,7 +1,7 @@
 import * as fsExtra from 'fs-extra';
 import * as path from 'path';
 import * as isEmptyDir from 'empty-dir';
-import * as latestVersion from 'latest-version';
+import latestVersion from 'latest-version';
 import * as childProcess from 'child_process';
 
 export class InitCommand {
