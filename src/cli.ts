@@ -40,10 +40,6 @@ yargs
     })
     .command('init [path]', '', () => { }, (argv: any) => {
         const initCommand = new InitCommand();
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        initCommand.run(argv).catch(e => {
-            console.error(e);
-            process.exit(1);
-        });
+        initCommand.run({ path: argv.path });
     })
     .argv;
