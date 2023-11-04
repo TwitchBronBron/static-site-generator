@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
+## [0.5.2](https://github.com/twitchbronbron/statigen/compare/v0.5.1...v0.5.2) - 2023-11-03
+### Fixed
+ - just completely remove `latest-version` in favor of `npm show` command
+
+
+
 ## [0.5.1](https://github.com/twitchbronbron/statigen/compare/v0.5.0...v0.5.1) - 2023-09-28
 ### Fixed
  - downgrade to latest-version@5.1.0 because it is ESM-only which is a pain
