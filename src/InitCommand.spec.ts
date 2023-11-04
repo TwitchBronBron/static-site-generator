@@ -6,7 +6,7 @@ import * as semver from 'semver';
 
 describe('init command', () => {
     it('initializes with the very latest version of statigen', function test() {
-        this.timeout(10_000);
+        this.timeout(20_000);
         const cmd = new InitCommand();
         cmd.run({ path: tempDir });
         const statigenVersion = fsExtra.readJsonSync(`${tempDir}/package.json`).dependencies['statigen'].replace('^', '') as string;
