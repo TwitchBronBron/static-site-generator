@@ -1,12 +1,12 @@
 import * as fsExtra from 'fs-extra';
 import * as path from 'path';
 import * as isEmptyDir from 'empty-dir';
-import * as latestVersion from 'latest-version';
 import * as childProcess from 'child_process';
+import { getLatestVersion } from './util';
 
 export class InitCommand {
 
-    public async run(options: { path: string }) {
+    public run(options: { path: string }) {
         let outDir: string;
         if (options.path) {
             outDir = path.resolve(process.cwd(), options.path);
@@ -35,7 +35,7 @@ export class InitCommand {
                     watch: 'statigen --watch'
                 },
                 dependencies: {
-                    statigen: `^${await latestVersion('statigen')}`
+                    statigen: `^${getLatestVersion('statigen')}`
                 }
             }, null, 4)
         );

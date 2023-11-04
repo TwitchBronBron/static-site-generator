@@ -2,6 +2,8 @@ import * as path from 'path';
 import * as moment from 'moment';
 import * as chalk from 'chalk';
 import type { Range } from './interfaces';
+import { execSync } from 'child_process';
+import * as semver from 'semver';
 
 /**
  *
@@ -99,4 +101,15 @@ export function replacePath(subject: string, search: string, replace: string) {
     } else {
         return subject;
     }
+}
+
+/**
+ *
+ * @param packageName Find the latest-published version of an npm package
+ */
+export function getLatestVersion(packageName: string) {
+    const versions = JSON.parse(
+        execSync(`npm view ${packageName} versions --json`).toString()
+    ) as string[];
+    return semver.maxSatisfying(versions, '*');
 }
